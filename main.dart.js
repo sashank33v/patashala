@@ -23429,7 +23429,7 @@ return A.b([o*m+l*k+j*n,o*r+l*q+j*s,o*p[0]+l*p[1]+j*p[2]],t.n)},
 Bb(){var s=0,r=A.T(t.fw),q,p
 var $async$Bb=A.U(function(a,b){if(a===1)return A.Q(b,r)
 while(true)switch(s){case 0:s=3
-return A.X(A.aoj(A.eY("http://localhost:8000/api/topics")),$async$Bb)
+return A.X(A.aoj(A.eY("https://patashala-api.onrender.com/api/topics")),$async$Bb)
 case 3:p=b
 if(p.b===200){q=J.aev(B.c3.zM(A.aob(A.an0(p.e)).dR(p.w),null),t.a)
 s=1
@@ -23439,7 +23439,7 @@ return A.S($async$Bb,r)},
 Ba(a){var s=0,r=A.T(t.a),q,p
 var $async$Ba=A.U(function(b,c){if(b===1)return A.Q(c,r)
 while(true)switch(s){case 0:s=3
-return A.X(A.aoj(A.eY("http://localhost:8000/api/topics/"+a)),$async$Ba)
+return A.X(A.aoj(A.eY("https://patashala-api.onrender.com/api/topics/"+a)),$async$Ba)
 case 3:p=c
 if(p.b===200){q=B.c3.zM(A.aob(A.an0(p.e)).dR(p.w),null)
 s=1
