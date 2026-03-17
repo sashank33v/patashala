@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:8000/api';
+  static const String baseUrl = 'https://patashala-api.onrender.com/api';
 
   static Future<List<Map<String, dynamic>>> fetchTopics() async {
     final response = await http.get(Uri.parse('$baseUrl/topics'));
