@@ -60,6 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final textColor = AdaptiveColors.text(context);
     final subtextColor = AdaptiveColors.subtext(context);
     return Scaffold(
+      drawerScrimColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black.withOpacity(0.24)
+          : Colors.transparent,
       endDrawer: Drawer(
         backgroundColor: Theme.of(context).brightness == Brightness.dark
             ? const Color(0xFF0A1024)
