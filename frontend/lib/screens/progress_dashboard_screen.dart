@@ -94,9 +94,9 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
                 title: const Text('Text Size'),
                 subtitle: Slider(
                   value: _settings.textScale,
-                  min: 0.9,
-                  max: 1.3,
-                  divisions: 4,
+                  min: 0.8,
+                  max: 1.8,
+                  divisions: 10,
                   label: _settings.textScale.toStringAsFixed(1),
                   onChanged: (v) => _updateSettings(_settings.copyWith(textScale: v)),
                 ),

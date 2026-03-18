@@ -14,7 +14,6 @@ class AppSettings {
   final bool reducedMotion;
   final double textScale;
   final double animationSpeed;
-  final String language;
 
   const AppSettings({
     required this.notifications,
@@ -27,7 +26,6 @@ class AppSettings {
     required this.reducedMotion,
     required this.textScale,
     required this.animationSpeed,
-    required this.language,
   });
 
   factory AppSettings.defaults() {
@@ -42,7 +40,6 @@ class AppSettings {
       reducedMotion: false,
       textScale: 1.0,
       animationSpeed: 1.0,
-      language: 'English',
     );
   }
 
@@ -57,7 +54,6 @@ class AppSettings {
     bool? reducedMotion,
     double? textScale,
     double? animationSpeed,
-    String? language,
   }) {
     return AppSettings(
       notifications: notifications ?? this.notifications,
@@ -70,7 +66,6 @@ class AppSettings {
       reducedMotion: reducedMotion ?? this.reducedMotion,
       textScale: textScale ?? this.textScale,
       animationSpeed: animationSpeed ?? this.animationSpeed,
-      language: language ?? this.language,
     );
   }
 
@@ -86,7 +81,6 @@ class AppSettings {
       'reducedMotion': reducedMotion,
       'textScale': textScale,
       'animationSpeed': animationSpeed,
-      'language': language,
     };
   }
 
@@ -102,7 +96,6 @@ class AppSettings {
       reducedMotion: map['reducedMotion'] as bool? ?? false,
       textScale: (map['textScale'] as num?)?.toDouble() ?? 1.0,
       animationSpeed: (map['animationSpeed'] as num?)?.toDouble() ?? 1.0,
-      language: map['language'] as String? ?? 'English',
     );
   }
 }
