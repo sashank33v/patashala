@@ -101,24 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   onChanged: (v) => _updateSettings(_settings.copyWith(textScale: v)),
                 ),
               ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.language),
-                title: const Text('Language'),
-                trailing: DropdownButton<String>(
-                  value: _settings.language,
-                  items: const [
-                    DropdownMenuItem(value: 'English', child: Text('English')),
-                    DropdownMenuItem(value: 'Hindi', child: Text('Hindi')),
-                    DropdownMenuItem(value: 'Telugu', child: Text('Telugu')),
-                  ],
-                  onChanged: (v) {
-                    if (v != null) {
-                      _updateSettings(_settings.copyWith(language: v));
-                    }
-                  },
-                ),
-              ),
               const Divider(height: 28),
               ListTile(
                 onTap: _logout,
