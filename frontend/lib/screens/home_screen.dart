@@ -60,108 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final textColor = AdaptiveColors.text(context);
     final subtextColor = AdaptiveColors.subtext(context);
     return Scaffold(
-      drawerScrimColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.black.withOpacity(0.24)
-          : Colors.transparent,
-      endDrawer: Drawer(
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? const Color(0xFF0A1024)
-            : const Color(0xFFFFEAF3),
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
-          children: [
-            Text(AppStrings.t('home_settings'),
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: textColor)),
-            const SizedBox(height: 16),
-            if (!_settingsLoaded)
-              const Center(
-                  child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: CircularProgressIndicator()))
-            else ...[
-              Text(AppStrings.t('appearance'),
-                  style: TextStyle(color: subtextColor)),
-              SwitchListTile(
-                value: _settings.darkMode,
-                onChanged: (v) =>
-                    _updateSettings(_settings.copyWith(darkMode: v)),
-                title: Text(_settings.darkMode
-                    ? AppStrings.t('dark_mode')
-                    : AppStrings.t('bright_mode')),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(AppStrings.t('language'),
-                    style: TextStyle(color: textColor)),
-                trailing: DropdownButton<String>(
-                  value: _settings.languageCode,
-                  items: [
-                    DropdownMenuItem(
-                        value: 'en', child: Text(AppStrings.t('english'))),
-                    DropdownMenuItem(
-                        value: 'te', child: Text(AppStrings.t('telugu'))),
-                  ],
-                  onChanged: (v) {
-                    if (v == null) return;
-                    _updateSettings(_settings.copyWith(languageCode: v));
-                  },
-                ),
-              ),
-              Text(AppStrings.t('learning_boost'),
-                  style: TextStyle(color: subtextColor)),
-              SwitchListTile(
-                value: _settings.showHints,
-                onChanged: (v) =>
-                    _updateSettings(_settings.copyWith(showHints: v)),
-                title: Text(AppStrings.t('show_hints')),
-              ),
-              SwitchListTile(
-                value: _settings.autoPlay,
-                onChanged: (v) =>
-                    _updateSettings(_settings.copyWith(autoPlay: v)),
-                title: Text(AppStrings.t('autoplay_visuals')),
-              ),
-              Text(AppStrings.t('experience'),
-                  style: TextStyle(color: subtextColor)),
-              SwitchListTile(
-                value: _settings.soundEffects,
-                onChanged: (v) =>
-                    _updateSettings(_settings.copyWith(soundEffects: v)),
-                title: Text(AppStrings.t('sound_effects')),
-              ),
-              SwitchListTile(
-                value: _settings.haptics,
-                onChanged: (v) =>
-                    _updateSettings(_settings.copyWith(haptics: v)),
-                title: Text(AppStrings.t('haptic_feedback')),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(AppStrings.t('text_size')),
-                subtitle: Slider(
-                  value: _settings.textScale,
-                  min: 0.8,
-                  max: 1.8,
-                  divisions: 10,
-                  label: _settings.textScale.toStringAsFixed(1),
-                  onChanged: (v) =>
-                      _updateSettings(_settings.copyWith(textScale: v)),
-                ),
-              ),
-              const Divider(height: 28),
-              ListTile(
-                onTap: _logout,
-                leading: const Icon(Icons.logout, color: Colors.redAccent),
-                title: Text(AppStrings.t('logout'),
-                    style: const TextStyle(color: Colors.redAccent)),
-              ),
-            ],
-          ],
-        ),
-      ),
       body: MeshBackground(
         child: SafeArea(
           child: FutureBuilder<Map<String, dynamic>>(
@@ -190,13 +88,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 30,
                                   fontWeight: FontWeight.w900,
                                   color: textColor))),
-                      Builder(
-                        builder: (context) => IconButton(
-                          tooltip: 'Settings',
-                          onPressed: () => Scaffold.of(context).openEndDrawer(),
-                          icon: const Icon(Icons.settings,
-                              color: NeonPalette.cyan),
-                        ),
+                      IconButton(
+                        tooltip: 'Settings',
+                        onPressed: () => _openSettingsSheet(context),
+                        icon:
+                            const Icon(Icons.settings, color: NeonPalette.cyan),
                       ),
                     ],
                   ),
@@ -315,6 +211,122 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _openSettingsSheet(BuildContext context) async {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      barrierColor: Colors.transparent,
+      backgroundColor:
+          isDark ? const Color(0xFF0A1024) : const Color(0xFFFFEAF3),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          child: _buildSettingsContent(context),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsContent(BuildContext context) {
+    final textColor = AdaptiveColors.text(context);
+    final subtextColor = AdaptiveColors.subtext(context);
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Text(AppStrings.t('home_settings'),
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.w800, color: textColor)),
+        const SizedBox(height: 16),
+        if (!_settingsLoaded)
+          const Center(
+              child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: CircularProgressIndicator()))
+        else ...[
+          Text(AppStrings.t('appearance'),
+              style: TextStyle(color: subtextColor)),
+          SwitchListTile(
+            value: _settings.darkMode,
+            onChanged: (v) => _updateSettings(_settings.copyWith(darkMode: v)),
+            title: Text(_settings.darkMode
+                ? AppStrings.t('dark_mode')
+                : AppStrings.t('bright_mode')),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(AppStrings.t('language'),
+                style: TextStyle(color: textColor)),
+            trailing: DropdownButton<String>(
+              value: _settings.languageCode,
+              items: [
+                DropdownMenuItem(
+                    value: 'en', child: Text(AppStrings.t('english'))),
+                DropdownMenuItem(
+                    value: 'te', child: Text(AppStrings.t('telugu'))),
+              ],
+              onChanged: (v) {
+                if (v == null) return;
+                _updateSettings(_settings.copyWith(languageCode: v));
+              },
+            ),
+          ),
+          Text(AppStrings.t('learning_boost'),
+              style: TextStyle(color: subtextColor)),
+          SwitchListTile(
+            value: _settings.showHints,
+            onChanged: (v) => _updateSettings(_settings.copyWith(showHints: v)),
+            title: Text(AppStrings.t('show_hints')),
+          ),
+          SwitchListTile(
+            value: _settings.autoPlay,
+            onChanged: (v) => _updateSettings(_settings.copyWith(autoPlay: v)),
+            title: Text(AppStrings.t('autoplay_visuals')),
+          ),
+          Text(AppStrings.t('experience'),
+              style: TextStyle(color: subtextColor)),
+          SwitchListTile(
+            value: _settings.soundEffects,
+            onChanged: (v) =>
+                _updateSettings(_settings.copyWith(soundEffects: v)),
+            title: Text(AppStrings.t('sound_effects')),
+          ),
+          SwitchListTile(
+            value: _settings.haptics,
+            onChanged: (v) => _updateSettings(_settings.copyWith(haptics: v)),
+            title: Text(AppStrings.t('haptic_feedback')),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(AppStrings.t('text_size')),
+            subtitle: Slider(
+              value: _settings.textScale,
+              min: 0.8,
+              max: 1.8,
+              divisions: 10,
+              label: _settings.textScale.toStringAsFixed(1),
+              onChanged: (v) =>
+                  _updateSettings(_settings.copyWith(textScale: v)),
+            ),
+          ),
+          const Divider(height: 28),
+          ListTile(
+            onTap: () async {
+              Navigator.of(context).pop();
+              await _logout();
+            },
+            leading: const Icon(Icons.logout, color: Colors.redAccent),
+            title: Text(AppStrings.t('logout'),
+                style: const TextStyle(color: Colors.redAccent)),
+          ),
+        ],
+      ],
     );
   }
 
