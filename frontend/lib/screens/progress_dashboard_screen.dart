@@ -80,21 +80,6 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
                     _updateSettings(_settings.copyWith(darkMode: v)),
                 title: Text(_settings.darkMode ? 'Dark Mode' : 'Bright Mode'),
               ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: const Text('Language'),
-                trailing: DropdownButton<String>(
-                  value: _settings.languageCode,
-                  items: const [
-                    DropdownMenuItem(value: 'en', child: Text('English')),
-                    DropdownMenuItem(value: 'te', child: Text('Telugu')),
-                  ],
-                  onChanged: (v) {
-                    if (v == null) return;
-                    _updateSettings(_settings.copyWith(languageCode: v));
-                  },
-                ),
-              ),
               const Text('Learning',
                   style: TextStyle(color: NeonPalette.subtext)),
               SwitchListTile(

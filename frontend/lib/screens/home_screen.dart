@@ -22,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<Map<String, dynamic>> _progressFuture;
   AppSettings _settings = AppSettings.defaults();
   bool _settingsLoaded = false;
-  bool _isSettingsOpen = false;
 
   @override
   void initState() {
@@ -60,78 +59,80 @@ class _HomeScreenState extends State<HomeScreen> {
     final textColor = AdaptiveColors.text(context);
     final subtextColor = AdaptiveColors.subtext(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          MeshBackground(
-            child: SafeArea(
-              child: FutureBuilder<Map<String, dynamic>>(
-                future: _progressFuture,
-                builder: (context, snapshot) {
-                  final summary =
-                      snapshot.data?['summary'] as Map<String, dynamic>?;
-                  final trig =
-                      (summary?['Trigonometry'] as Map<String, dynamic>?) ??
-                          {'percent': 0.0};
-                  final mens =
-                      (summary?['Mensuration'] as Map<String, dynamic>?) ??
-                          {'percent': 0.0};
-                  final overall = ((((trig['percent'] as num?)?.toDouble() ?? 0) +
-                              ((mens['percent'] as num?)?.toDouble() ?? 0)) /
-                          2) /
-                      100;
-
-                  return ListView(
-                    padding: const EdgeInsets.all(16),
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              child: Text('Patashala',
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w900,
-                                      color: textColor))),
-                          IconButton(
-                            tooltip: 'Settings',
-                            onPressed: () =>
-                                setState(() => _isSettingsOpen = true),
-                            icon: const Icon(Icons.settings,
-                                color: NeonPalette.cyan),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      GlassCard(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Welcome Back',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                          color: textColor)),
-                                  const SizedBox(height: 4),
-                                  Text('Streak: 5 days',
-                                      style: TextStyle(color: subtextColor)),
-                                ],
-                              ),
-                            ),
-                            ProgressRing(progress: overall),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      Text('Featured Topics',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                              color: textColor)),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 160,
+      drawerScrimColor: Colors.transparent,
+      endDrawer: Drawer(
+        backgroundColor: const Color(0xFF0A1024),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
+          children: [
+            const Text('Home Settings',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 16),
+            if (!_settingsLoaded)
+              const Center(
+                  child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: CircularProgressIndicator()))
+            else ...[
+              Text('Appearance', style: TextStyle(color: subtextColor)),
+              SwitchListTile(
+                value: _settings.darkMode,
+                onChanged: (v) =>
+                    _updateSettings(_settings.copyWith(darkMode: v)),
+                title: Text(_settings.darkMode ? 'Dark Mode' : 'Bright Mode'),
+              ),
+              Text('Learning Boost', style: TextStyle(color: subtextColor)),
+              SwitchListTile(
+                value: _settings.showHints,
+                onChanged: (v) =>
+                    _updateSettings(_settings.copyWith(showHints: v)),
+                title: const Text('Show Formula Hints'),
+              ),
+              SwitchListTile(
+                value: _settings.autoPlay,
+                onChanged: (v) =>
+                    _updateSettings(_settings.copyWith(autoPlay: v)),
+                title: const Text('Auto-play Visuals'),
+              ),
+              Text('Experience', style: TextStyle(color: subtextColor)),
+              SwitchListTile(
+                value: _settings.soundEffects,
+                onChanged: (v) =>
+                    _updateSettings(_settings.copyWith(soundEffects: v)),
+                title: const Text('Sound Effects'),
+              ),
+              SwitchListTile(
+                value: _settings.haptics,
+                onChanged: (v) =>
+                    _updateSettings(_settings.copyWith(haptics: v)),
+                title: const Text('Haptic Feedback'),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Text Size'),
+                subtitle: Slider(
+                  value: _settings.textScale,
+                  min: 0.8,
+                  max: 1.8,
+                  divisions: 10,
+                  label: _settings.textScale.toStringAsFixed(1),
+                  onChanged: (v) =>
+                      _updateSettings(_settings.copyWith(textScale: v)),
+                ),
+              ),
+              const Divider(height: 28),
+              ListTile(
+                onTap: _logout,
+                leading: const Icon(Icons.logout, color: Colors.redAccent),
+                title: const Text('Logout',
+                    style: TextStyle(color: Colors.redAccent)),
+              ),
+            ],
+          ],
+        ),
+      ),
+      body: MeshBackground(
+        child: SafeArea(
           child: FutureBuilder<Map<String, dynamic>>(
             future: _progressFuture,
             builder: (context, snapshot) {
