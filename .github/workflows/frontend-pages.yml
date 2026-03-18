@@ -37,7 +37,7 @@ jobs:
       - name: Build web
         run: |
           cd frontend
-          flutter build web --release --base-href /patashala/ --dart-define=API_BASE_URL=https://patashala-api.onrender.com
+          flutter build web --release --pwa-strategy=none --base-href /patashala/ --dart-define=API_BASE_URL=https://patashala-api.onrender.com
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
