@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings {
+  final bool darkMode;
   final bool notifications;
   final bool soundEffects;
   final bool haptics;
@@ -16,6 +17,7 @@ class AppSettings {
   final double animationSpeed;
 
   const AppSettings({
+    required this.darkMode,
     required this.notifications,
     required this.soundEffects,
     required this.haptics,
@@ -30,6 +32,7 @@ class AppSettings {
 
   factory AppSettings.defaults() {
     return const AppSettings(
+      darkMode: true,
       notifications: true,
       soundEffects: true,
       haptics: true,
@@ -44,6 +47,7 @@ class AppSettings {
   }
 
   AppSettings copyWith({
+    bool? darkMode,
     bool? notifications,
     bool? soundEffects,
     bool? haptics,
@@ -56,6 +60,7 @@ class AppSettings {
     double? animationSpeed,
   }) {
     return AppSettings(
+      darkMode: darkMode ?? this.darkMode,
       notifications: notifications ?? this.notifications,
       soundEffects: soundEffects ?? this.soundEffects,
       haptics: haptics ?? this.haptics,
@@ -71,6 +76,7 @@ class AppSettings {
 
   Map<String, dynamic> toMap() {
     return {
+      'darkMode': darkMode,
       'notifications': notifications,
       'soundEffects': soundEffects,
       'haptics': haptics,
@@ -86,6 +92,7 @@ class AppSettings {
 
   factory AppSettings.fromMap(Map<String, dynamic> map) {
     return AppSettings(
+      darkMode: map['darkMode'] as bool? ?? true,
       notifications: map['notifications'] as bool? ?? true,
       soundEffects: map['soundEffects'] as bool? ?? true,
       haptics: map['haptics'] as bool? ?? true,

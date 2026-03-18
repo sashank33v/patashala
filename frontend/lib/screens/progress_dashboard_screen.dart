@@ -66,6 +66,12 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
             if (!_settingsLoaded)
               const Center(child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()))
             else ...[
+              const Text('Appearance', style: TextStyle(color: NeonPalette.subtext)),
+              SwitchListTile(
+                value: _settings.darkMode,
+                onChanged: (v) => _updateSettings(_settings.copyWith(darkMode: v)),
+                title: Text(_settings.darkMode ? 'Dark Mode' : 'Bright Mode'),
+              ),
               const Text('Learning', style: TextStyle(color: NeonPalette.subtext)),
               SwitchListTile(
                 value: _settings.showHints,

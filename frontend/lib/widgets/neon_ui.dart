@@ -19,19 +19,22 @@ class MeshBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF090D18), Color(0xFF10192B), Color(0xFF110F22)],
+          colors: isDark
+              ? const [Color(0xFF090D18), Color(0xFF10192B), Color(0xFF110F22)]
+              : const [Color(0xFFF9FAFF), Color(0xFFEFF4FF), Color(0xFFF7F7FF)],
         ),
       ),
       child: Stack(
         children: [
-          Positioned(top: -120, left: -60, child: _orb(260, NeonPalette.purple.withOpacity(0.25))),
-          Positioned(top: 180, right: -80, child: _orb(240, NeonPalette.cyan.withOpacity(0.22))),
-          Positioned(bottom: -100, left: 120, child: _orb(280, NeonPalette.pink.withOpacity(0.20))),
+          Positioned(top: -120, left: -60, child: _orb(260, NeonPalette.purple.withOpacity(isDark ? 0.25 : 0.15))),
+          Positioned(top: 180, right: -80, child: _orb(240, NeonPalette.cyan.withOpacity(isDark ? 0.22 : 0.14))),
+          Positioned(bottom: -100, left: 120, child: _orb(280, NeonPalette.pink.withOpacity(isDark ? 0.20 : 0.12))),
           Positioned.fill(child: child),
         ],
       ),

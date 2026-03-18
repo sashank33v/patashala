@@ -17,35 +17,52 @@ class PatashalaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = ThemeData.dark(useMaterial3: true);
-    return MaterialApp(
-      title: 'Patashala',
-      debugShowCheckedModeBanner: false,
-      theme: base.copyWith(
-        scaffoldBackgroundColor: NeonPalette.bg,
-        textTheme: GoogleFonts.plusJakartaSansTextTheme(base.textTheme).apply(
-          bodyColor: NeonPalette.text,
-          displayColor: NeonPalette.text,
-        ),
-        colorScheme: base.colorScheme.copyWith(
-          primary: NeonPalette.purple,
-          secondary: NeonPalette.cyan,
-          surface: NeonPalette.panel,
-        ),
+    final darkBase = ThemeData.dark(useMaterial3: true);
+    final lightBase = ThemeData.light(useMaterial3: true);
+    final darkTheme = darkBase.copyWith(
+      scaffoldBackgroundColor: NeonPalette.bg,
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(darkBase.textTheme).apply(
+        bodyColor: NeonPalette.text,
+        displayColor: NeonPalette.text,
       ),
-      builder: (context, child) {
-        return ValueListenableBuilder<AppSettings>(
-          valueListenable: LocalPrefs.settingsNotifier,
-          builder: (context, settings, _) {
+      colorScheme: darkBase.colorScheme.copyWith(
+        primary: NeonPalette.purple,
+        secondary: NeonPalette.cyan,
+        surface: NeonPalette.panel,
+      ),
+    );
+    final lightTheme = lightBase.copyWith(
+      scaffoldBackgroundColor: const Color(0xFFF5F7FB),
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(lightBase.textTheme).apply(
+        bodyColor: const Color(0xFF0F172A),
+        displayColor: const Color(0xFF0F172A),
+      ),
+      colorScheme: lightBase.colorScheme.copyWith(
+        primary: const Color(0xFF4F46E5),
+        secondary: const Color(0xFF0891B2),
+        surface: Colors.white,
+      ),
+    );
+
+    return ValueListenableBuilder<AppSettings>(
+      valueListenable: LocalPrefs.settingsNotifier,
+      builder: (context, settings, _) {
+        return MaterialApp(
+          title: 'Patashala',
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: settings.darkMode ? ThemeMode.dark : ThemeMode.light,
+          builder: (context, child) {
             final media = MediaQuery.of(context);
             return MediaQuery(
               data: media.copyWith(textScaler: TextScaler.linear(settings.textScale)),
               child: child ?? const SizedBox.shrink(),
             );
           },
+          home: const _BootstrapScreen(),
         );
       },
-      home: const _BootstrapScreen(),
     );
   }
 }
