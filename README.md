@@ -4,7 +4,15 @@ Patashala is a student interactive visualization app that transforms math learni
 It combines simulation-first content, modern UX, and performance-focused engineering across web and mobile.
 
 ## Demo Video
-[![Demo Video](./ytthumbnail.png)](https://youtu.be/i67CCsWdrDo)
+<div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;">
+  <div style="position:relative;display:inline-block;max-width:640px;">
+    <a href="https://youtu.be/i67CCsWdrDo" style="display:block;">
+      <img src="./ytthumbnail.png" alt="Patashala demo" loading="lazy" style="display:block;width:100%;border-radius:16px;" />
+      <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;background:rgba(0,0,0,0.75);border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;">▶</span>
+    </a>
+  </div>
+  <a href="https://youtu.be/i67CCsWdrDo" style="font-weight:600;color:#0b6efd;">Watch the demo on YouTube</a>
+</div>
 
 ## Project Structure
 ```text
