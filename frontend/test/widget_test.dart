@@ -1,30 +1,44 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:frontend/main.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:patashala/api_service.dart';
+import 'package:patashala/main.dart';
+import 'package:patashala/widgets/neon_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Login then home renders', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
+    ApiService.client = MockClient((request) async {
+      if (request.url.path == '/auth/login') {
+        return http.Response(jsonEncode({'user_id': 1, 'name': 'Test', 'username': 'student'}), 200);
+      }
+      if (request.url.path == '/progress/1') {
+        return http.Response(
+          jsonEncode({
+            'summary': {
+              'Trigonometry': {'percent': 40.0},
+              'Mensuration': {'percent': 20.0},
+            }
+          }),
+          200,
+        );
+      }
+      return http.Response('{}', 200);
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(const PatashalaApp());
+    await tester.pump(const Duration(milliseconds: 400));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    expect(find.text('Login'), findsOneWidget);
+    final loginButton = find.widgetWithText(NeonButton, 'Login');
+    await tester.ensureVisible(loginButton);
+    await tester.tap(loginButton);
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Patashala'), findsOneWidget);
+    expect(find.text('Featured Topics'), findsOneWidget);
   });
 }
