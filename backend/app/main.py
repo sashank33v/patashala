@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 from urllib.parse import urlencode
 
@@ -30,7 +31,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as exc:
+    logging.exception("Database initialization warning: %s", exc)
 
 
 @app.get("/health")
