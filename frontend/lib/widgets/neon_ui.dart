@@ -19,8 +19,9 @@ class AdaptiveColors {
   static Color text(BuildContext context) =>
       isDark(context) ? NeonPalette.text : const Color(0xFF1D4ED8);
 
-  static Color subtext(BuildContext context) =>
-      isDark(context) ? NeonPalette.subtext : const Color(0xFF2563EB);
+  static Color subtext(BuildContext context) => isDark(context)
+      ? NeonPalette.subtext
+      : const Color(0xFF4338CA); // deep blue for supportive text
 }
 
 class MeshBackground extends StatelessWidget {
@@ -36,9 +37,9 @@ class MeshBackground extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: isDark
-              ? const [Color(0xFF090D18), Color(0xFF10192B), Color(0xFF110F22)]
-              : const [Color(0xFFF9FAFF), Color(0xFFEFF4FF), Color(0xFFF7F7FF)],
+        colors: isDark
+            ? const [Color(0xFF090D18), Color(0xFF10192B), Color(0xFF110F22)]
+            : const [Color(0xFFFFF4FB), Color(0xFFFFEDF5), Color(0xFFFCE9F7)],
         ),
       ),
       child: Stack(
@@ -111,8 +112,8 @@ class GlassCard extends StatelessWidget {
                       Colors.white.withOpacity(0.04)
                     ]
                   : [
-                      Colors.white.withOpacity(0.90),
-                      Colors.white.withOpacity(0.72)
+                      Colors.white.withOpacity(0.95),
+                      const Color(0xFFFFF4FB)
                     ],
             ),
           ),

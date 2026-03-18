@@ -135,11 +135,29 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
   }
 
   Widget _buildVisualizationHub(String id) {
-    if (id.startsWith('chem-')) {
-      return const ReactionVisualizer();
+    if (id == 'chem-reaction-kinetics') {
+      return const ReactionKineticsVisualizer();
     }
-    if (id.startsWith('phy-')) {
+    if (id == 'chem-equilibrium') {
+      return const EquilibriumVisualizer();
+    }
+    if (id == 'chem-molarity-lab') {
+      return const MolarityLabVisualizer();
+    }
+    if (id == 'chem-spectroscopy') {
+      return const SpectroscopyVisualizer();
+    }
+    if (id == 'phy-electric-field') {
+      return const ElectricFieldVisualizer();
+    }
+    if (id == 'phy-magnetism') {
+      return const MagneticFieldVisualizer();
+    }
+    if (id == 'phy-projectile-motion') {
       return const ProjectileVisualizer();
+    }
+    if (id == 'phy-wave-motion') {
+      return const InterferenceVisualizer();
     }
     if (id.startsWith('mens-')) {
       return MensurationVisualizationHub(topicId: id);
@@ -204,11 +222,47 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
           'Higher speed increases the range and height.',
           'Notice how gravity curves the path downward.',
         ];
+      case 'phy-wave-motion':
+        return [
+          'This mimics ripple tanks and water surfaces.',
+          'Frequency adjustment shortens/lengthens the wavelength.',
+          'Constructive interference raises wave peaks.',
+        ];
+      case 'phy-electric-field':
+        return [
+          'Field lines show how a probe charge would accelerate.',
+          'Drag the red/blue charges to change the pattern.',
+          'Density of lines reflects the field strength near electrodes.',
+        ];
       case 'chem-reaction-kinetics':
         return [
           'Drag the slider to simulate concentration changes.',
           'Temperature affects how fast progress occurs.',
           'Watch the progress bar fill based on your values.',
+        ];
+      case 'chem-equilibrium':
+        return [
+          'Le Chatelier predicts how the system shifts when stressed.',
+          'Heating or compressing pushes the balance left or right.',
+          'Colored bars show how concentrations rebalance.',
+        ];
+      case 'chem-molarity-lab':
+        return [
+          'Molarity links solute amount to solution volume.',
+          'Higher molarity creates denser particle clouds.',
+          'Volume slider mirrors how labs standardize solutions.',
+        ];
+      case 'chem-spectroscopy':
+        return [
+          'Wavelengths map directly to vivid emission bands.',
+          'Intensity slider mimics how photons build up in a flame.',
+          'Use the graph to predict what a lab spectrometer would see.',
+        ];
+      case 'phy-magnetism':
+        return [
+          'Magnetic field lines swirl around the conductor.',
+          'Stronger current makes loops glow and arrows clearer.',
+          'Arrows show the direction a compass would pivot.',
         ];
       default:
         return [

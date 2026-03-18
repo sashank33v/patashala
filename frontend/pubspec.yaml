@@ -11,8 +11,12 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   http: ^1.2.0
-  google_fonts: ^6.2.1
+  google_fonts: 6.2.1
   shared_preferences: ^2.3.2
+
+dependency_overrides:
+  google_fonts:
+    path: local_google_fonts
 
 dev_dependencies:
   flutter_test:

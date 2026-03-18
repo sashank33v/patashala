@@ -1,0 +1,10 @@
+name: google_fonts
+version: 6.2.1
+publish_to: none
+description: Local stub that exposes the text themes required by Patashala.
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter

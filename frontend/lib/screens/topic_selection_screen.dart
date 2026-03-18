@@ -8,9 +8,14 @@ import 'visualization_screen.dart';
 class TopicSelectionScreen extends StatefulWidget {
   final int userId;
   final String? recommendedTopic;
+  final String? initialSubject;
 
-  const TopicSelectionScreen(
-      {super.key, required this.userId, this.recommendedTopic});
+  const TopicSelectionScreen({
+    super.key,
+    required this.userId,
+    this.recommendedTopic,
+    this.initialSubject,
+  });
 
   @override
   State<TopicSelectionScreen> createState() => _TopicSelectionScreenState();
@@ -25,6 +30,7 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
   void initState() {
     super.initState();
     _topics = ApiService.fetchTopics();
+    selectedSubject = widget.initialSubject;
   }
 
   @override
@@ -69,18 +75,42 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
               },
             ]);
 
-            final filtered = filter == 'All'
-                ? all
-                : all.where((t) => t['subject'] == filter).toList();
-
             final chemTopics = [
               {
                 'id': 'chem-reaction-kinetics',
                 'title': 'Reaction Kinetics',
-                'description': 'Visualize rate vs concentration',
+                'description':
+                    'Adjust concentration + temperature to match a titration curve.',
                 'subject': 'Chemistry',
                 'difficulty': 'Beginner',
                 'duration': '8 min'
+              },
+              {
+                'id': 'chem-equilibrium',
+                'title': 'Chemical Equilibrium',
+                'description':
+                    'Stress with pressure/temperature and watch Le Chatelier respond.',
+                'subject': 'Chemistry',
+                'difficulty': 'Intermediate',
+                'duration': '10 min'
+              },
+              {
+                'id': 'chem-molarity-lab',
+                'title': 'Molarity Lab Setup',
+                'description':
+                    'Prep solutions and track how concentration affects conductivity.',
+                'subject': 'Chemistry',
+                'difficulty': 'Intermediate',
+                'duration': '11 min'
+              },
+              {
+                'id': 'chem-spectroscopy',
+                'title': 'Spectroscopy Curve',
+                'description':
+                    'Slide wavelengths and observe how colors form emission bands.',
+                'subject': 'Chemistry',
+                'difficulty': 'Intermediate',
+                'duration': '10 min'
               },
             ];
 
@@ -88,12 +118,50 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
               {
                 'id': 'phy-projectile-motion',
                 'title': 'Projectile Motion',
-                'description': 'Angle and speed control of trajectories',
+                'description':
+                    'Model how launch angle, gravity and drag affect a real shot.',
                 'subject': 'Physics',
                 'difficulty': 'Beginner',
                 'duration': '9 min'
               },
+              {
+                'id': 'phy-wave-motion',
+                'title': 'Wave Motion',
+                'description': 'Simulate pulses along a rope or water surface.',
+                'subject': 'Physics',
+                'difficulty': 'Intermediate',
+                'duration': '10 min'
+              },
+              {
+                'id': 'phy-electric-field',
+                'title': 'Electric Field Mapping',
+                'description':
+                    'Drag charges and watch field lines visualize the force.',
+                'subject': 'Physics',
+                'difficulty': 'Intermediate',
+                'duration': '12 min'
+              },
+              {
+                'id': 'phy-magnetism',
+                'title': 'Magnetic Field Lab',
+                'description':
+                    'Position magnets and sliders to feel how loops distort.',
+                'subject': 'Physics',
+                'difficulty': 'Intermediate',
+                'duration': '10 min'
+              },
             ];
+
+            final mathTopics = all
+                .where((t) =>
+                    (t['subject'] as String).contains('Trig') ||
+                    (t['subject'] as String).contains('Mens'))
+                .toList();
+            final mathFiltered = filter == 'All'
+                ? mathTopics
+                : mathTopics
+                    .where((t) => t['subject'] == filter)
+                    .toList();
 
             if (selectedSubject == null) {
               return ListView(
@@ -143,31 +211,13 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
               );
             }
 
-            List<Map<String, dynamic>> subjectTopics =
-                selectedSubject == 'Chemistry'
-                    ? chemTopics
-                    : selectedSubject == 'Physics'
-                        ? physTopics
-                        : filtered;
+            final subjectTopics = selectedSubject == 'Chemistry'
+                ? chemTopics
+                : selectedSubject == 'Physics'
+                    ? physTopics
+                    : mathFiltered;
 
-            if (selectedSubject != null && selectedSubject != 'Maths') {
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: subjectTopics.length,
-                itemBuilder: (context, i) => TopicCard(
-                  topic: subjectTopics[i],
-                  index: i,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => VisualizationScreen(
-                            userId: widget.userId, topic: subjectTopics[i])),
-                  ),
-                ),
-              );
-            }
-
-            if (selectedSubject != null && subjectTopics.isEmpty) {
+            if (subjectTopics.isEmpty) {
               return Center(
                 child: Text('No topics available for $selectedSubject yet.',
                     style: TextStyle(color: textColor)),
@@ -189,12 +239,14 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
                         icon: const Icon(Icons.arrow_back, size: 16),
                         label: const Text('Subjects'),
                       ),
-                      const SizedBox(width: 8),
-                      _filterChip('All', 'All'),
-                      const SizedBox(width: 8),
-                      _filterChip('Trigonometry', 'Trigonometry'),
-                      const SizedBox(width: 8),
-                      _filterChip('Mensuration', 'Mensuration'),
+                      if (selectedSubject == 'Maths') ...[
+                        const SizedBox(width: 8),
+                        _filterChip('All', 'All'),
+                        const SizedBox(width: 8),
+                        _filterChip('Trigonometry', 'Trigonometry'),
+                        const SizedBox(width: 8),
+                        _filterChip('Mensuration', 'Mensuration'),
+                      ],
                     ],
                   ),
                 ),

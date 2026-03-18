@@ -32,16 +32,16 @@ class PatashalaApp extends StatelessWidget {
       ),
     );
     final lightTheme = lightBase.copyWith(
-      scaffoldBackgroundColor: const Color(0xFFF5F7FB),
+      scaffoldBackgroundColor: const Color(0xFFFFF0F4),
       textTheme:
           GoogleFonts.plusJakartaSansTextTheme(lightBase.textTheme).apply(
-        bodyColor: const Color(0xFF0F172A),
-        displayColor: const Color(0xFF0F172A),
+        bodyColor: const Color(0xFF1D4ED8),
+        displayColor: const Color(0xFF1D4ED8),
       ),
       colorScheme: lightBase.colorScheme.copyWith(
-        primary: const Color(0xFF4F46E5),
-        secondary: const Color(0xFF0891B2),
-        surface: Colors.white,
+        primary: const Color(0xFF1D4ED8),
+        secondary: const Color(0xFFDB2777),
+        surface: const Color(0xFFFFFBFF),
       ),
     );
 
