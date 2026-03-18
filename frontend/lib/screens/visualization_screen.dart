@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
+import '../services/app_strings.dart';
 import '../widgets/mensuration_visualizations.dart';
 import '../widgets/neon_ui.dart';
 import '../widgets/trig_visualizations.dart';
@@ -10,7 +11,8 @@ class VisualizationScreen extends StatefulWidget {
   final int userId;
   final Map<String, dynamic> topic;
 
-  const VisualizationScreen({super.key, required this.userId, required this.topic});
+  const VisualizationScreen(
+      {super.key, required this.userId, required this.topic});
 
   @override
   State<VisualizationScreen> createState() => _VisualizationScreenState();
@@ -24,9 +26,11 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
     final id = widget.topic['id'].toString();
     final isMens = id.startsWith('mens-');
     final notes = _notesForTopic(id);
+    final subtextColor = AdaptiveColors.subtext(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.topic['title']?.toString() ?? 'Visualization')),
+      appBar: AppBar(
+          title: Text(widget.topic['title']?.toString() ?? 'Visualization')),
       body: MeshBackground(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -38,9 +42,14 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.topic['title']?.toString() ?? '', style: const TextStyle(fontSize: 23, fontWeight: FontWeight.w800)),
+                      Text(widget.topic['title']?.toString() ?? '',
+                          style: const TextStyle(
+                              fontSize: 23, fontWeight: FontWeight.w800)),
                       const SizedBox(height: 6),
-                      Text(widget.topic['description']?.toString() ?? 'Interactive explorer', style: const TextStyle(color: NeonPalette.subtext)),
+                      Text(
+                          widget.topic['description']?.toString() ??
+                              'Interactive explorer',
+                          style: TextStyle(color: subtextColor)),
                     ],
                   ),
                 ),
@@ -54,7 +63,10 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                           : TrigVisualizationHub(topicId: id),
                     );
                     final noteBoard = GlassCard(
-                      child: _NotesPanel(topicTitle: widget.topic['title']?.toString() ?? 'Topic', notes: notes),
+                      child: _NotesPanel(
+                          topicTitle:
+                              widget.topic['title']?.toString() ?? 'Topic',
+                          notes: notes),
                     );
 
                     if (!wide) {
@@ -82,8 +94,12 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                     Expanded(
                       child: NeonButton(
                         onTap: () async {
-                          if (!id.contains('tangent') && !id.contains('interference')) {
-                            await ApiService.postProgress(userId: widget.userId, topic: id, completed: true);
+                          if (!id.contains('tangent') &&
+                              !id.contains('interference')) {
+                            await ApiService.postProgress(
+                                userId: widget.userId,
+                                topic: id,
+                                completed: true);
                           }
                           if (!mounted) return;
                           setState(() => completed = true);
@@ -91,9 +107,12 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(completed ? Icons.check_circle : Icons.flag, size: 18),
+                            Icon(completed ? Icons.check_circle : Icons.flag,
+                                size: 18),
                             const SizedBox(width: 8),
-                            Text(completed ? 'Completed' : 'Mark Complete'),
+                            Text(completed
+                                ? AppStrings.t('completed')
+                                : AppStrings.t('mark_complete')),
                           ],
                         ),
                       ),
@@ -103,9 +122,11 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                       child: NeonButton(
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => QuizScreen(userId: widget.userId, topic: widget.topic)),
+                          MaterialPageRoute(
+                              builder: (_) => QuizScreen(
+                                  userId: widget.userId, topic: widget.topic)),
                         ),
-                        child: const Center(child: Text('Mini Quiz')),
+                        child: Center(child: Text(AppStrings.t('mini_quiz'))),
                       ),
                     ),
                   ],
@@ -192,9 +213,12 @@ class _NotesPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Reading Notes', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: titleColor)),
+        Text(AppStrings.t('reading_notes'),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w900, color: titleColor)),
         const SizedBox(height: 6),
-        Text(topicTitle, style: TextStyle(color: subtextColor, fontWeight: FontWeight.w700)),
+        Text(topicTitle,
+            style: TextStyle(color: subtextColor, fontWeight: FontWeight.w700)),
         const SizedBox(height: 10),
         ...notes.asMap().entries.map(
               (e) => Padding(
@@ -212,10 +236,17 @@ class _NotesPanel extends StatelessWidget {
                             : const Color(0x220F172A),
                         borderRadius: BorderRadius.circular(11),
                       ),
-                      child: Text('${e.key + 1}', style: TextStyle(fontSize: 12, color: titleColor, fontWeight: FontWeight.w800)),
+                      child: Text('${e.key + 1}',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: titleColor,
+                              fontWeight: FontWeight.w800)),
                     ),
                     const SizedBox(width: 8),
-                    Expanded(child: Text(e.value, style: TextStyle(color: subtextColor, height: 1.35))),
+                    Expanded(
+                        child: Text(e.value,
+                            style:
+                                TextStyle(color: subtextColor, height: 1.35))),
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
+import '../services/app_strings.dart';
 import '../services/local_prefs.dart';
 import '../widgets/neon_ui.dart';
 import 'home_screen.dart';
@@ -56,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => HomeScreen(userId: result['user_id'] as int)),
+        MaterialPageRoute(
+            builder: (_) => HomeScreen(userId: result['user_id'] as int)),
       );
     } catch (e) {
       setState(() => error = e.toString().replaceFirst('Exception: ', ''));
@@ -83,22 +85,36 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Name')),
+                TextField(
+                    controller: nameCtrl,
+                    decoration: const InputDecoration(labelText: 'Name')),
                 const SizedBox(height: 8),
-                TextField(controller: userCtrl, decoration: const InputDecoration(labelText: 'Username')),
+                TextField(
+                    controller: userCtrl,
+                    decoration: const InputDecoration(labelText: 'Username')),
                 const SizedBox(height: 8),
-                TextField(controller: passCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
+                TextField(
+                    controller: passCtrl,
+                    obscureText: true,
+                    decoration: const InputDecoration(labelText: 'Password')),
                 const SizedBox(height: 8),
-                TextField(controller: confirmCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'Confirm Password')),
+                TextField(
+                    controller: confirmCtrl,
+                    obscureText: true,
+                    decoration:
+                        const InputDecoration(labelText: 'Confirm Password')),
                 if (dialogError != null) ...[
                   const SizedBox(height: 8),
-                  Text(dialogError!, style: const TextStyle(color: Colors.redAccent)),
+                  Text(dialogError!,
+                      style: const TextStyle(color: Colors.redAccent)),
                 ],
               ],
             ),
           ),
           actions: [
-            TextButton(onPressed: inProgress ? null : () => Navigator.pop(context), child: const Text('Cancel')),
+            TextButton(
+                onPressed: inProgress ? null : () => Navigator.pop(context),
+                child: const Text('Cancel')),
             FilledButton(
               onPressed: inProgress
                   ? null
@@ -108,11 +124,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       final pass = passCtrl.text;
                       final confirm = confirmCtrl.text;
                       if (name.isEmpty || username.isEmpty || pass.isEmpty) {
-                        setDialogState(() => dialogError = 'All fields are required');
+                        setDialogState(
+                            () => dialogError = 'All fields are required');
                         return;
                       }
                       if (pass != confirm) {
-                        setDialogState(() => dialogError = 'Passwords do not match');
+                        setDialogState(
+                            () => dialogError = 'Passwords do not match');
                         return;
                       }
                       setDialogState(() {
@@ -120,7 +138,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         dialogError = null;
                       });
                       try {
-                        final result = await ApiService.register(name: name, username: username, password: pass);
+                        final result = await ApiService.register(
+                            name: name, username: username, password: pass);
                         if (!mounted) return;
                         await LocalPrefs.saveSession(
                           userId: result['user_id'] as int,
@@ -131,10 +150,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (_) => HomeScreen(userId: result['user_id'] as int)),
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  HomeScreen(userId: result['user_id'] as int)),
                         );
                       } catch (e) {
-                        setDialogState(() => dialogError = e.toString().replaceFirst('Exception: ', ''));
+                        setDialogState(() => dialogError =
+                            e.toString().replaceFirst('Exception: ', ''));
                       } finally {
                         if (mounted) setDialogState(() => inProgress = false);
                       }
@@ -164,20 +186,33 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(controller: userCtrl, decoration: const InputDecoration(labelText: 'Username')),
+                TextField(
+                    controller: userCtrl,
+                    decoration: const InputDecoration(labelText: 'Username')),
                 const SizedBox(height: 8),
-                TextField(controller: passCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'New Password')),
+                TextField(
+                    controller: passCtrl,
+                    obscureText: true,
+                    decoration:
+                        const InputDecoration(labelText: 'New Password')),
                 const SizedBox(height: 8),
-                TextField(controller: confirmCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'Confirm New Password')),
+                TextField(
+                    controller: confirmCtrl,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                        labelText: 'Confirm New Password')),
                 if (dialogError != null) ...[
                   const SizedBox(height: 8),
-                  Text(dialogError!, style: const TextStyle(color: Colors.redAccent)),
+                  Text(dialogError!,
+                      style: const TextStyle(color: Colors.redAccent)),
                 ],
               ],
             ),
           ),
           actions: [
-            TextButton(onPressed: inProgress ? null : () => Navigator.pop(context), child: const Text('Cancel')),
+            TextButton(
+                onPressed: inProgress ? null : () => Navigator.pop(context),
+                child: const Text('Cancel')),
             FilledButton(
               onPressed: inProgress
                   ? null
@@ -186,11 +221,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       final pass = passCtrl.text;
                       final confirm = confirmCtrl.text;
                       if (username.isEmpty || pass.isEmpty) {
-                        setDialogState(() => dialogError = 'All fields are required');
+                        setDialogState(
+                            () => dialogError = 'All fields are required');
                         return;
                       }
                       if (pass != confirm) {
-                        setDialogState(() => dialogError = 'Passwords do not match');
+                        setDialogState(
+                            () => dialogError = 'Passwords do not match');
                         return;
                       }
                       setDialogState(() {
@@ -198,7 +235,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         dialogError = null;
                       });
                       try {
-                        await ApiService.forgotPassword(username: username, newPassword: pass);
+                        await ApiService.forgotPassword(
+                            username: username, newPassword: pass);
                         if (!mounted) return;
                         Navigator.pop(context);
                         setState(() {
@@ -207,10 +245,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           error = null;
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Password updated. Please login.')),
+                          const SnackBar(
+                              content: Text('Password updated. Please login.')),
                         );
                       } catch (e) {
-                        setDialogState(() => dialogError = e.toString().replaceFirst('Exception: ', ''));
+                        setDialogState(() => dialogError =
+                            e.toString().replaceFirst('Exception: ', ''));
                       } finally {
                         if (mounted) setDialogState(() => inProgress = false);
                       }
@@ -225,6 +265,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = AdaptiveColors.text(context);
+    final subtextColor = AdaptiveColors.subtext(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: MeshBackground(
         child: SafeArea(
@@ -237,140 +280,181 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 980),
                     child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final compact = constraints.maxWidth < 850;
-                    final panels = [
-                      GlassCard(
-                        child: Container(
-                          constraints: const BoxConstraints(minHeight: 420),
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Patashala', style: TextStyle(fontSize: 44, fontWeight: FontWeight.w900)),
-                              const SizedBox(height: 6),
-                              const Text(
-                                'Learn Trigonometry + Mensuration with interactive visuals.',
-                                style: TextStyle(fontSize: 18, color: NeonPalette.subtext, fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(height: 26),
-                              Wrap(
-                                spacing: 10,
-                                runSpacing: 10,
-                                children: const [
-                                  _Badge(icon: Icons.functions, text: 'Live Graphs'),
-                                  _Badge(icon: Icons.grid_on_rounded, text: 'Area & Perimeter'),
-                                  _Badge(icon: Icons.quiz_rounded, text: 'Quick Quizzes'),
-                                  _Badge(icon: Icons.emoji_events_rounded, text: 'XP + Badges'),
-                                ],
-                              ),
-                              const SizedBox(height: 28),
-                              const Text(
-                                'Tip: Use `student / student123` for demo login.',
-                                style: TextStyle(color: NeonPalette.cyan, fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      GlassCard(
-                        child: Container(
-                          constraints: const BoxConstraints(minHeight: 420),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Welcome Back', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900)),
-                              const SizedBox(height: 6),
-                              const Text('Login with username and password', style: TextStyle(color: NeonPalette.subtext)),
-                              const SizedBox(height: 20),
-                              TextField(
-                                controller: usernameCtrl,
-                                decoration: const InputDecoration(labelText: 'Username', border: OutlineInputBorder()),
-                              ),
-                              const SizedBox(height: 12),
-                              TextField(
-                                controller: passwordCtrl,
-                                obscureText: obscure,
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  border: const OutlineInputBorder(),
-                                  suffixIcon: IconButton(
-                                    onPressed: () => setState(() => obscure = !obscure),
-                                    icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Row(
+                      builder: (context, constraints) {
+                        final compact = constraints.maxWidth < 850;
+                        final panels = [
+                          GlassCard(
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 420),
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Checkbox(
-                                    value: rememberMe,
-                                    onChanged: (value) => setState(() => rememberMe = value ?? true),
+                                  Text(AppStrings.t('app_name'),
+                                      style: TextStyle(
+                                          fontSize: 44,
+                                          fontWeight: FontWeight.w900,
+                                          color: textColor)),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Learn Trigonometry + Mensuration with interactive visuals.',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: subtextColor,
+                                        fontWeight: FontWeight.w600),
                                   ),
-                                  const Text('Remember me'),
-                                ],
-                              ),
-                              if (error != null) ...[
-                                const SizedBox(height: 8),
-                                Text(error!, style: const TextStyle(color: Colors.redAccent)),
-                              ],
-                              const SizedBox(height: 12),
-                              SizedBox(
-                                width: double.infinity,
-                                child: NeonButton(
-                                  onTap: loading ? () {} : _login,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      if (loading)
-                                        const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                                      else
-                                        const Icon(Icons.login, size: 18),
-                                      const SizedBox(width: 8),
-                                      const Text('Login'),
+                                  const SizedBox(height: 26),
+                                  Wrap(
+                                    spacing: 10,
+                                    runSpacing: 10,
+                                    children: const [
+                                      _Badge(
+                                          icon: Icons.functions,
+                                          text: 'Live Graphs'),
+                                      _Badge(
+                                          icon: Icons.grid_on_rounded,
+                                          text: 'Area & Perimeter'),
+                                      _Badge(
+                                          icon: Icons.quiz_rounded,
+                                          text: 'Quick Quizzes'),
+                                      _Badge(
+                                          icon: Icons.emoji_events_rounded,
+                                          text: 'XP + Badges'),
                                     ],
                                   ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  TextButton(
-                                    onPressed: _openRegisterDialog,
-                                    child: const Text('Create Account'),
-                                  ),
-                                  const Spacer(),
-                                  TextButton(
-                                    onPressed: _openForgotPasswordDialog,
-                                    child: const Text('Forgot Password?'),
+                                  const SizedBox(height: 28),
+                                  Text(
+                                    'Tip: Use `student / student123` for demo login.',
+                                    style: TextStyle(
+                                        color: isDark
+                                            ? NeonPalette.cyan
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w700),
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ];
+                          GlassCard(
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 420),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(AppStrings.t('login_title'),
+                                      style: TextStyle(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w900,
+                                          color: textColor)),
+                                  const SizedBox(height: 6),
+                                  Text(AppStrings.t('login_subtitle'),
+                                      style: TextStyle(color: subtextColor)),
+                                  const SizedBox(height: 20),
+                                  TextField(
+                                    controller: usernameCtrl,
+                                    decoration: InputDecoration(
+                                        labelText: AppStrings.t('username'),
+                                        border: const OutlineInputBorder()),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  TextField(
+                                    controller: passwordCtrl,
+                                    obscureText: obscure,
+                                    decoration: InputDecoration(
+                                      labelText: AppStrings.t('password'),
+                                      border: const OutlineInputBorder(),
+                                      suffixIcon: IconButton(
+                                        onPressed: () =>
+                                            setState(() => obscure = !obscure),
+                                        icon: Icon(obscure
+                                            ? Icons.visibility_off
+                                            : Icons.visibility),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: rememberMe,
+                                        onChanged: (value) => setState(
+                                            () => rememberMe = value ?? true),
+                                      ),
+                                      Text(AppStrings.t('remember_me'),
+                                          style: TextStyle(color: textColor)),
+                                    ],
+                                  ),
+                                  if (error != null) ...[
+                                    const SizedBox(height: 8),
+                                    Text(error!,
+                                        style: const TextStyle(
+                                            color: Colors.redAccent)),
+                                  ],
+                                  const SizedBox(height: 12),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: NeonButton(
+                                      onTap: loading ? () {} : _login,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          if (loading)
+                                            const SizedBox(
+                                                width: 18,
+                                                height: 18,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        strokeWidth: 2))
+                                          else
+                                            const Icon(Icons.login, size: 18),
+                                          const SizedBox(width: 8),
+                                          Text(AppStrings.t('login')),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                        onPressed: _openRegisterDialog,
+                                        child: Text(
+                                            AppStrings.t('create_account')),
+                                      ),
+                                      const Spacer(),
+                                      TextButton(
+                                        onPressed: _openForgotPasswordDialog,
+                                        child: Text(
+                                            AppStrings.t('forgot_password')),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ];
 
-                    if (compact) {
-                      return Column(
-                        children: [
-                          panels[0],
-                          const SizedBox(height: 14),
-                          panels[1],
-                        ],
-                      );
-                    }
+                        if (compact) {
+                          return Column(
+                            children: [
+                              panels[0],
+                              const SizedBox(height: 14),
+                              panels[1],
+                            ],
+                          );
+                        }
 
-                    return Row(
-                      children: [
-                        Expanded(child: panels[0]),
-                        const SizedBox(width: 18),
-                        Expanded(child: panels[1]),
-                      ],
-                    );
-                  },
+                        return Row(
+                          children: [
+                            Expanded(child: panels[0]),
+                            const SizedBox(width: 18),
+                            Expanded(child: panels[1]),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),

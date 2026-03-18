@@ -10,10 +10,12 @@ class MensurationVisualizationHub extends StatefulWidget {
   const MensurationVisualizationHub({super.key, required this.topicId});
 
   @override
-  State<MensurationVisualizationHub> createState() => _MensurationVisualizationHubState();
+  State<MensurationVisualizationHub> createState() =>
+      _MensurationVisualizationHubState();
 }
 
-class _MensurationVisualizationHubState extends State<MensurationVisualizationHub> {
+class _MensurationVisualizationHubState
+    extends State<MensurationVisualizationHub> {
   @override
   Widget build(BuildContext context) {
     switch (widget.topicId) {
@@ -35,7 +37,8 @@ class RectangleAreaInteractive extends StatefulWidget {
   const RectangleAreaInteractive({super.key});
 
   @override
-  State<RectangleAreaInteractive> createState() => _RectangleAreaInteractiveState();
+  State<RectangleAreaInteractive> createState() =>
+      _RectangleAreaInteractiveState();
 }
 
 class _RectangleAreaInteractiveState extends State<RectangleAreaInteractive>
@@ -47,7 +50,9 @@ class _RectangleAreaInteractiveState extends State<RectangleAreaInteractive>
   @override
   void initState() {
     super.initState();
-    _rulerAnim = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+    _rulerAnim =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2))
+          ..repeat();
   }
 
   @override
@@ -107,7 +112,10 @@ class _RectangleAreaInteractiveState extends State<RectangleAreaInteractive>
         Center(
           child: Text(
             'Area = ${length.toStringAsFixed(0)} x ${width.toStringAsFixed(0)} = ${area.toStringAsFixed(0)} sq units',
-            style: const TextStyle(color: NeonPalette.cyan, fontWeight: FontWeight.w800, fontSize: 17),
+            style: const TextStyle(
+                color: NeonPalette.cyan,
+                fontWeight: FontWeight.w800,
+                fontSize: 17),
           ),
         ),
       ],
@@ -125,12 +133,19 @@ class _RectangleAreaInteractiveState extends State<RectangleAreaInteractive>
     return (l, w);
   }
 
-  Widget _slider(String t, double v, double min, double max, ValueChanged<double> on) {
+  Widget _slider(
+      String t, double v, double min, double max, ValueChanged<double> on) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$t: ${v.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.w700)),
-        Slider(value: v, min: min, max: max, divisions: (max - min).toInt(), onChanged: on),
+        Text('$t: ${v.toStringAsFixed(0)}',
+            style: const TextStyle(fontWeight: FontWeight.w700)),
+        Slider(
+            value: v,
+            min: min,
+            max: max,
+            divisions: (max - min).toInt(),
+            onChanged: on),
       ],
     );
   }
@@ -183,7 +198,10 @@ class _SquareAreaInteractiveState extends State<SquareAreaInteractive> {
         Center(
           child: Text(
             'Square Area = ${side.toStringAsFixed(0)}² = ${area.toStringAsFixed(0)} sq units',
-            style: const TextStyle(color: NeonPalette.pink, fontWeight: FontWeight.w800, fontSize: 17),
+            style: const TextStyle(
+                color: NeonPalette.pink,
+                fontWeight: FontWeight.w800,
+                fontSize: 17),
           ),
         ),
       ],
@@ -194,7 +212,8 @@ class _SquareAreaInteractiveState extends State<SquareAreaInteractive> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$t: ${v.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.w700)),
+        Text('$t: ${v.toStringAsFixed(0)}',
+            style: const TextStyle(fontWeight: FontWeight.w700)),
         Slider(value: v, min: 1, max: 12, divisions: 11, onChanged: on),
       ],
     );
@@ -218,7 +237,9 @@ class _PerimeterInteractiveState extends State<PerimeterInteractive>
   @override
   void initState() {
     super.initState();
-    _edgeAnim = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))..repeat();
+    _edgeAnim = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1500))
+      ..repeat();
   }
 
   @override
@@ -279,6 +300,8 @@ class _PerimeterInteractiveState extends State<PerimeterInteractive>
                         width: width,
                         isSquare: isSquare,
                         phase: _edgeAnim.value,
+                        darkMode:
+                            Theme.of(context).brightness == Brightness.dark,
                       ),
                       child: const SizedBox.expand(),
                     ),
@@ -295,14 +318,18 @@ class _PerimeterInteractiveState extends State<PerimeterInteractive>
             isSquare
                 ? 'Perimeter = 4 x ${a.toStringAsFixed(0)} = ${perimeter.toStringAsFixed(0)} units'
                 : 'Perimeter = 2 x (${a.toStringAsFixed(0)} + ${width.toStringAsFixed(0)}) = ${perimeter.toStringAsFixed(0)} units',
-            style: const TextStyle(color: NeonPalette.cyan, fontWeight: FontWeight.w800, fontSize: 17),
+            style: const TextStyle(
+                color: NeonPalette.cyan,
+                fontWeight: FontWeight.w800,
+                fontSize: 17),
           ),
         ),
       ],
     );
   }
 
-  (double, double) _rectUnitsFromPoint(Offset p, Size size, {required bool lockSquare}) {
+  (double, double) _rectUnitsFromPoint(Offset p, Size size,
+      {required bool lockSquare}) {
     const pad = 40.0;
     final areaW = (size.width - pad * 2).clamp(100.0, 900.0);
     final areaH = (size.height - pad * 2).clamp(100.0, 900.0);
@@ -320,7 +347,8 @@ class _PerimeterInteractiveState extends State<PerimeterInteractive>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$t: ${v.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.w700)),
+        Text('$t: ${v.toStringAsFixed(0)}',
+            style: const TextStyle(fontWeight: FontWeight.w700)),
         Slider(value: v, min: 1, max: 12, divisions: 11, onChanged: on),
       ],
     );
@@ -362,7 +390,8 @@ class _GridMethodInteractiveState extends State<GridMethodInteractive> {
             builder: (context, c) {
               return GestureDetector(
                 onTapDown: (d) {
-                  final key = _keyFromTap(d.localPosition, Size(c.maxWidth, c.maxHeight));
+                  final key = _keyFromTap(
+                      d.localPosition, Size(c.maxWidth, c.maxHeight));
                   if (key == null) return;
                   setState(() {
                     final current = _cellState[key] ?? 0;
@@ -375,7 +404,8 @@ class _GridMethodInteractiveState extends State<GridMethodInteractive> {
                   });
                 },
                 child: CustomPaint(
-                  painter: _GridTapPainter(cols: cols, rows: rows, cellState: _cellState),
+                  painter: _GridTapPainter(
+                      cols: cols, rows: rows, cellState: _cellState),
                   child: const SizedBox.expand(),
                 ),
               );
@@ -432,12 +462,19 @@ class _GridMethodInteractiveState extends State<GridMethodInteractive> {
     );
   }
 
-  Widget _slider(String t, double v, double min, double max, ValueChanged<double> on) {
+  Widget _slider(
+      String t, double v, double min, double max, ValueChanged<double> on) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$t: ${v.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.w700)),
-        Slider(value: v, min: min, max: max, divisions: (max - min).toInt(), onChanged: on),
+        Text('$t: ${v.toStringAsFixed(0)}',
+            style: const TextStyle(fontWeight: FontWeight.w700)),
+        Slider(
+            value: v,
+            min: min,
+            max: max,
+            divisions: (max - min).toInt(),
+            onChanged: on),
       ],
     );
   }
@@ -451,23 +488,31 @@ class _HintSteps extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = AdaptiveColors.text(context);
+    final subtextColor = AdaptiveColors.subtext(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: Colors.white.withOpacity(0.05),
-        border: Border.all(color: Colors.white12),
+        color:
+            isDark ? Colors.white.withOpacity(0.05) : const Color(0xFFFFEEF6),
+        border: Border.all(
+            color: isDark ? Colors.white12 : const Color(0x330F172A)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900)),
+          Text(title,
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w900, color: textColor)),
           const SizedBox(height: 6),
           for (int i = 0; i < steps.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
-              child: Text('${i + 1}. ${steps[i]}', style: const TextStyle(color: NeonPalette.subtext)),
+              child: Text('${i + 1}. ${steps[i]}',
+                  style: TextStyle(color: subtextColor)),
             ),
         ],
       ),
@@ -482,17 +527,21 @@ class _Stage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       height: 340,
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(
+            color: isDark ? Colors.white12 : const Color(0x330F172A)),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Colors.white.withOpacity(0.08), Colors.white.withOpacity(0.02)],
+          colors: isDark
+              ? [Colors.white.withOpacity(0.08), Colors.white.withOpacity(0.02)]
+              : [const Color(0xFFFFF1F8), const Color(0xFFFFEAF4)],
         ),
       ),
       child: child,
@@ -547,29 +596,36 @@ class _RectGamePainter extends CustomPainter {
     );
 
     final handle = Offset(rect.right, rect.top);
-    canvas.drawCircle(handle, 11, Paint()..color = NeonPalette.purple.withOpacity(0.28));
+    canvas.drawCircle(
+        handle, 11, Paint()..color = NeonPalette.purple.withOpacity(0.28));
     canvas.drawCircle(handle, 7, Paint()..color = NeonPalette.purple);
 
-    _drawArrow(canvas, Offset(left, top - 18), Offset(rect.right, top - 18), NeonPalette.cyan, phase);
-    _drawArrow(canvas, Offset(left - 18, top), Offset(left - 18, bottom), NeonPalette.pink, phase);
+    _drawArrow(canvas, Offset(left, top - 18), Offset(rect.right, top - 18),
+        NeonPalette.cyan, phase);
+    _drawArrow(canvas, Offset(left - 18, top), Offset(left - 18, bottom),
+        NeonPalette.pink, phase);
 
     final tp = TextPainter(textDirection: TextDirection.ltr);
     tp.text = TextSpan(
       text: 'L=${length.toStringAsFixed(0)}',
-      style: const TextStyle(color: NeonPalette.cyan, fontWeight: FontWeight.w800),
+      style:
+          const TextStyle(color: NeonPalette.cyan, fontWeight: FontWeight.w800),
     );
     tp.layout();
     tp.paint(canvas, Offset((left + rect.right) / 2 - tp.width / 2, top - 36));
 
     tp.text = TextSpan(
       text: 'W=${width.toStringAsFixed(0)}',
-      style: const TextStyle(color: NeonPalette.pink, fontWeight: FontWeight.w800),
+      style:
+          const TextStyle(color: NeonPalette.pink, fontWeight: FontWeight.w800),
     );
     tp.layout();
-    tp.paint(canvas, Offset(left - tp.width - 24, (top + bottom) / 2 - tp.height / 2));
+    tp.paint(canvas,
+        Offset(left - tp.width - 24, (top + bottom) / 2 - tp.height / 2));
   }
 
-  void _drawArrow(Canvas canvas, Offset a, Offset b, Color color, double phase) {
+  void _drawArrow(
+      Canvas canvas, Offset a, Offset b, Color color, double phase) {
     final p = Paint()
       ..color = color.withOpacity(0.8 + 0.2 * math.sin(phase * math.pi * 2))
       ..strokeWidth = 2.5;
@@ -598,12 +654,14 @@ class _PerimeterGamePainter extends CustomPainter {
   final double width;
   final bool isSquare;
   final double phase;
+  final bool darkMode;
 
   _PerimeterGamePainter({
     required this.length,
     required this.width,
     required this.isSquare,
     required this.phase,
+    required this.darkMode,
   });
 
   @override
@@ -631,19 +689,30 @@ class _PerimeterGamePainter extends CustomPainter {
 
     final t = phase;
     final pulseX = rect.left + (rect.width * t);
-    canvas.drawCircle(Offset(pulseX, rect.top), 5, Paint()..color = NeonPalette.cyan);
+    canvas.drawCircle(
+        Offset(pulseX, rect.top), 5, Paint()..color = NeonPalette.cyan);
 
-    for (final p in [rect.topLeft, rect.topRight, rect.bottomRight, rect.bottomLeft]) {
+    for (final p in [
+      rect.topLeft,
+      rect.topRight,
+      rect.bottomRight,
+      rect.bottomLeft
+    ]) {
       canvas.drawCircle(p, 6, Paint()..color = NeonPalette.pink);
     }
-    canvas.drawCircle(rect.topRight, 10, Paint()..color = NeonPalette.purple.withOpacity(0.3));
+    canvas.drawCircle(rect.topRight, 10,
+        Paint()..color = NeonPalette.purple.withOpacity(0.3));
 
     final tp = TextPainter(textDirection: TextDirection.ltr);
     tp.text = TextSpan(
       text: isSquare
           ? 'Drag top-right vertex | Side=${length.toStringAsFixed(0)}'
           : 'Drag top-right vertex | L=${length.toStringAsFixed(0)} W=${width.toStringAsFixed(0)}',
-      style: const TextStyle(color: NeonPalette.subtext, fontSize: 13, fontWeight: FontWeight.w700),
+      style: TextStyle(
+        color: darkMode ? NeonPalette.subtext : Colors.black,
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+      ),
     );
     tp.layout(maxWidth: size.width - 16);
     tp.paint(canvas, const Offset(10, 8));
@@ -654,7 +723,8 @@ class _PerimeterGamePainter extends CustomPainter {
     return oldDelegate.length != length ||
         oldDelegate.width != width ||
         oldDelegate.isSquare != isSquare ||
-        oldDelegate.phase != phase;
+        oldDelegate.phase != phase ||
+        oldDelegate.darkMode != darkMode;
   }
 }
 
@@ -663,12 +733,14 @@ class _GridTapPainter extends CustomPainter {
   final int rows;
   final Map<String, int> cellState;
 
-  _GridTapPainter({required this.cols, required this.rows, required this.cellState});
+  _GridTapPainter(
+      {required this.cols, required this.rows, required this.cellState});
 
   @override
   void paint(Canvas canvas, Size size) {
     const pad = 26.0;
-    final grid = Rect.fromLTWH(pad, pad, size.width - pad * 2, size.height - pad * 2);
+    final grid =
+        Rect.fromLTWH(pad, pad, size.width - pad * 2, size.height - pad * 2);
 
     final cellW = grid.width / cols;
     final cellH = grid.height / rows;
@@ -691,9 +763,11 @@ class _GridTapPainter extends CustomPainter {
       if (parts.length != 2) continue;
       final c = int.tryParse(parts[0]) ?? 0;
       final r = int.tryParse(parts[1]) ?? 0;
-      final rect = Rect.fromLTWH(grid.left + c * cellW, grid.top + r * cellH, cellW, cellH);
+      final rect = Rect.fromLTWH(
+          grid.left + c * cellW, grid.top + r * cellH, cellW, cellH);
       if (e.value == 1) {
-        canvas.drawRect(rect.deflate(1), Paint()..color = NeonPalette.cyan.withOpacity(0.5));
+        canvas.drawRect(rect.deflate(1),
+            Paint()..color = NeonPalette.cyan.withOpacity(0.5));
       }
       if (e.value == 2) {
         final tri = Path()
@@ -701,7 +775,8 @@ class _GridTapPainter extends CustomPainter {
           ..lineTo(rect.right, rect.bottom)
           ..lineTo(rect.right, rect.top)
           ..close();
-        canvas.drawPath(tri, Paint()..color = NeonPalette.pink.withOpacity(0.55));
+        canvas.drawPath(
+            tri, Paint()..color = NeonPalette.pink.withOpacity(0.55));
       }
     }
 
@@ -716,6 +791,8 @@ class _GridTapPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _GridTapPainter oldDelegate) {
-    return oldDelegate.cols != cols || oldDelegate.rows != rows || oldDelegate.cellState != cellState;
+    return oldDelegate.cols != cols ||
+        oldDelegate.rows != rows ||
+        oldDelegate.cellState != cellState;
   }
 }

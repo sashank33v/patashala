@@ -13,11 +13,14 @@ class NeonPalette {
 }
 
 class AdaptiveColors {
-  static bool isDark(BuildContext context) => Theme.of(context).brightness == Brightness.dark;
+  static bool isDark(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark;
 
-  static Color text(BuildContext context) => isDark(context) ? NeonPalette.text : const Color(0xFF111827);
+  static Color text(BuildContext context) =>
+      isDark(context) ? NeonPalette.text : const Color(0xFF111827);
 
-  static Color subtext(BuildContext context) => isDark(context) ? NeonPalette.subtext : const Color(0xFF374151);
+  static Color subtext(BuildContext context) =>
+      isDark(context) ? NeonPalette.subtext : Colors.black;
 }
 
 class MeshBackground extends StatelessWidget {
@@ -35,14 +38,26 @@ class MeshBackground extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: isDark
               ? const [Color(0xFF090D18), Color(0xFF10192B), Color(0xFF110F22)]
-              : const [Color(0xFFF9FAFF), Color(0xFFEFF4FF), Color(0xFFF7F7FF)],
+              : const [Color(0xFFFFEFF6), Color(0xFFFFE4F1), Color(0xFFFFF1F8)],
         ),
       ),
       child: Stack(
         children: [
-          Positioned(top: -120, left: -60, child: _orb(260, NeonPalette.purple.withOpacity(isDark ? 0.25 : 0.15))),
-          Positioned(top: 180, right: -80, child: _orb(240, NeonPalette.cyan.withOpacity(isDark ? 0.22 : 0.14))),
-          Positioned(bottom: -100, left: 120, child: _orb(280, NeonPalette.pink.withOpacity(isDark ? 0.20 : 0.12))),
+          Positioned(
+              top: -120,
+              left: -60,
+              child: _orb(
+                  260, NeonPalette.purple.withOpacity(isDark ? 0.25 : 0.15))),
+          Positioned(
+              top: 180,
+              right: -80,
+              child: _orb(
+                  240, NeonPalette.cyan.withOpacity(isDark ? 0.22 : 0.14))),
+          Positioned(
+              bottom: -100,
+              left: 120,
+              child: _orb(
+                  280, NeonPalette.pink.withOpacity(isDark ? 0.20 : 0.12))),
           Positioned.fill(child: child),
         ],
       ),
@@ -85,11 +100,20 @@ class GlassCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: isDark ? Colors.white.withOpacity(0.15) : const Color(0x330F172A)),
+            border: Border.all(
+                color: isDark
+                    ? Colors.white.withOpacity(0.15)
+                    : const Color(0x330F172A)),
             gradient: LinearGradient(
               colors: isDark
-                  ? [Colors.white.withOpacity(0.13), Colors.white.withOpacity(0.04)]
-                  : [Colors.white.withOpacity(0.90), Colors.white.withOpacity(0.72)],
+                  ? [
+                      Colors.white.withOpacity(0.13),
+                      Colors.white.withOpacity(0.04)
+                    ]
+                  : [
+                      const Color(0xFFFFF2F8).withOpacity(0.94),
+                      const Color(0xFFFFE8F3).withOpacity(0.88)
+                    ],
             ),
           ),
           padding: padding,
@@ -136,14 +160,19 @@ class _NeonButtonState extends State<NeonButton> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            gradient: const LinearGradient(colors: [NeonPalette.purple, NeonPalette.cyan]),
+            gradient: const LinearGradient(
+                colors: [NeonPalette.purple, NeonPalette.cyan]),
             boxShadow: [
-              BoxShadow(color: NeonPalette.purple.withOpacity(0.45), blurRadius: 16, spreadRadius: 1),
+              BoxShadow(
+                  color: NeonPalette.purple.withOpacity(0.45),
+                  blurRadius: 16,
+                  spreadRadius: 1),
             ],
           ),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           child: DefaultTextStyle(
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w700),
             child: widget.child,
           ),
         ),

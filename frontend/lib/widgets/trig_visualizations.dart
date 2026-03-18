@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../services/app_strings.dart';
 import 'neon_ui.dart';
 
 class TrigVisualizationHub extends StatefulWidget {
@@ -52,8 +53,9 @@ class _SineWaveVisualizerState extends State<SineWaveVisualizer>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 4))
-      ..repeat();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 4))
+          ..repeat();
   }
 
   @override
@@ -64,7 +66,8 @@ class _SineWaveVisualizerState extends State<SineWaveVisualizer>
 
   @override
   Widget build(BuildContext context) {
-    final waveColor = Color.lerp(NeonPalette.cyan, Colors.redAccent, (amplitude - 0.5) / 2.5)!;
+    final waveColor = Color.lerp(
+        NeonPalette.cyan, Colors.redAccent, (amplitude - 0.5) / 2.5)!;
     return RepaintBoundary(
       child: Column(
         children: [
@@ -104,11 +107,23 @@ class _SineWaveVisualizerState extends State<SineWaveVisualizer>
           ),
           const SizedBox(height: 8),
           _label('Amplitude', amplitude),
-          Slider(value: amplitude, min: 0.5, max: 3, onChanged: (v) => setState(() => amplitude = v)),
+          Slider(
+              value: amplitude,
+              min: 0.5,
+              max: 3,
+              onChanged: (v) => setState(() => amplitude = v)),
           _label('Frequency', frequency),
-          Slider(value: frequency, min: 0.5, max: 4, onChanged: (v) => setState(() => frequency = v)),
+          Slider(
+              value: frequency,
+              min: 0.5,
+              max: 4,
+              onChanged: (v) => setState(() => frequency = v)),
           _label('Phase Shift', phase),
-          Slider(value: phase, min: -pi, max: pi, onChanged: (v) => setState(() => phase = v)),
+          Slider(
+              value: phase,
+              min: -pi,
+              max: pi,
+              onChanged: (v) => setState(() => phase = v)),
         ],
       ),
     );
@@ -119,7 +134,8 @@ class _SineWaveVisualizerState extends State<SineWaveVisualizer>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(name, style: const TextStyle(color: NeonPalette.text)),
-        Text(value.toStringAsFixed(2), style: const TextStyle(color: NeonPalette.cyan)),
+        Text(value.toStringAsFixed(2),
+            style: const TextStyle(color: NeonPalette.cyan)),
       ],
     );
   }
@@ -142,13 +158,14 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
   @override
   void initState() {
     super.initState();
-    _rotationController = AnimationController(vsync: this, duration: const Duration(seconds: 10))
-      ..addListener(() {
-        if (!autoRotate) return;
-        setState(() {
-          angle = (_rotationController.value * 360) % 360;
-        });
-      });
+    _rotationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 10))
+          ..addListener(() {
+            if (!autoRotate) return;
+            setState(() {
+              angle = (_rotationController.value * 360) % 360;
+            });
+          });
   }
 
   @override
@@ -166,8 +183,27 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
             onPanUpdate: (d) {
               setState(() {
                 angle = (angle + d.delta.dx * 0.6).clamp(0, 360);
-                const snaps = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
-                final nearest = snaps.reduce((a, b) => (a - angle).abs() < (b - angle).abs() ? a : b);
+                const snaps = [
+                  0,
+                  30,
+                  45,
+                  60,
+                  90,
+                  120,
+                  135,
+                  150,
+                  180,
+                  210,
+                  225,
+                  240,
+                  270,
+                  300,
+                  315,
+                  330,
+                  360
+                ];
+                final nearest = snaps.reduce(
+                    (a, b) => (a - angle).abs() < (b - angle).abs() ? a : b);
                 if ((nearest - angle).abs() < 3) angle = nearest.toDouble();
               });
             },
@@ -193,12 +229,14 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
             runSpacing: 8,
             children: [
               OutlinedButton.icon(
-                onPressed: () => setState(() => angle = (angle - 15) < 0 ? 360 : angle - 15),
+                onPressed: () =>
+                    setState(() => angle = (angle - 15) < 0 ? 360 : angle - 15),
                 icon: const Icon(Icons.remove),
                 label: const Text('-15°'),
               ),
               OutlinedButton.icon(
-                onPressed: () => setState(() => angle = (angle + 15) > 360 ? 0 : angle + 15),
+                onPressed: () =>
+                    setState(() => angle = (angle + 15) > 360 ? 0 : angle + 15),
                 icon: const Icon(Icons.add),
                 label: const Text('+15°'),
               ),
@@ -227,7 +265,9 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
                       radians
                           ? 'Angle: ${(angle * pi / 180).toStringAsFixed(3)} rad'
                           : 'Angle: ${angle.toStringAsFixed(1)}°',
-                      style: const TextStyle(color: NeonPalette.text, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          color: AdaptiveColors.text(context),
+                          fontWeight: FontWeight.w700),
                     ),
                     Slider(
                       value: angle,
@@ -251,11 +291,14 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
           SwitchListTile.adaptive(
             activeColor: NeonPalette.pink,
             value: radians,
-            title: const Text('Radians mode', style: TextStyle(color: NeonPalette.text)),
+            title: Text('Radians mode',
+                style: TextStyle(color: AdaptiveColors.text(context))),
             onChanged: (v) => setState(() => radians = v),
             subtitle: Text(
-              radians ? '${(angle * pi / 180).toStringAsFixed(3)} rad' : '${angle.toStringAsFixed(1)}°',
-              style: const TextStyle(color: NeonPalette.subtext),
+              radians
+                  ? '${(angle * pi / 180).toStringAsFixed(3)} rad'
+                  : '${angle.toStringAsFixed(1)}°',
+              style: TextStyle(color: AdaptiveColors.subtext(context)),
             ),
           ),
         ],
@@ -264,7 +307,8 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
   }
 
   Widget _valueCard(String title, double value) {
-    final safe = value.isInfinite || value.isNaN ? '∞' : value.toStringAsFixed(3);
+    final safe =
+        value.isInfinite || value.isNaN ? '∞' : value.toStringAsFixed(3);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(4),
@@ -272,13 +316,15 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              Text(title, style: const TextStyle(color: NeonPalette.subtext)),
+              Text(title,
+                  style: TextStyle(color: AdaptiveColors.subtext(context))),
               TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: value.isFinite ? value : 0),
                 duration: const Duration(milliseconds: 300),
                 builder: (context, v, _) => Text(
                   value.isFinite ? v.toStringAsFixed(3) : safe,
-                  style: const TextStyle(color: NeonPalette.cyan, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      color: NeonPalette.cyan, fontWeight: FontWeight.w700),
                 ),
               ),
             ],
@@ -296,14 +342,31 @@ class ShadowHeightVisualizer extends StatefulWidget {
   State<ShadowHeightVisualizer> createState() => _ShadowHeightVisualizerState();
 }
 
-class _ShadowHeightVisualizerState extends State<ShadowHeightVisualizer> {
+class _ShadowHeightVisualizerState extends State<ShadowHeightVisualizer>
+    with SingleTickerProviderStateMixin {
   double angle = 40;
   double height = 6;
   bool night = false;
+  late final AnimationController _sceneAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _sceneAnim =
+        AnimationController(vsync: this, duration: const Duration(seconds: 20))
+          ..repeat();
+  }
+
+  @override
+  void dispose() {
+    _sceneAnim.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final shadow = height / tan(angle * pi / 180);
+    final textColor = AdaptiveColors.text(context);
     return RepaintBoundary(
       child: Column(
         children: [
@@ -312,34 +375,51 @@ class _ShadowHeightVisualizerState extends State<ShadowHeightVisualizer> {
             child: InteractiveViewer(
               minScale: 0.8,
               maxScale: 2,
-              child: CustomPaint(
-                painter: _ShadowScenePainter(angle: angle, height: height, night: night),
-                child: const SizedBox.expand(),
+              child: AnimatedBuilder(
+                animation: _sceneAnim,
+                builder: (context, _) => CustomPaint(
+                  painter: _ShadowScenePainter(
+                    angle: angle,
+                    height: height,
+                    night: night,
+                    time: _sceneAnim.value,
+                  ),
+                  child: const SizedBox.expand(),
+                ),
               ),
             ),
           ),
           SwitchListTile(
             value: night,
             activeColor: NeonPalette.pink,
-            title: const Text('Day / Sunset', style: TextStyle(color: NeonPalette.text)),
+            title: Text(AppStrings.t('day_sunset'),
+                style: TextStyle(color: textColor)),
             onChanged: (v) => setState(() => night = v),
           ),
-          _slider('Sun Angle', angle, 10, 80, (v) => setState(() => angle = v)),
-          _slider('Building Height', height, 2, 12, (v) => setState(() => height = v)),
+          _slider(AppStrings.t('sun_angle'), angle, 10, 80,
+              (v) => setState(() => angle = v)),
+          _slider(AppStrings.t('building_height'), height, 2, 12,
+              (v) => setState(() => height = v)),
           Text(
-            'shadow = height / tan(θ) => ${shadow.toStringAsFixed(2)} m',
-            style: const TextStyle(color: NeonPalette.cyan),
+            '${AppStrings.t('shadow_formula')} => ${shadow.toStringAsFixed(2)} m',
+            style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? NeonPalette.cyan
+                    : Colors.black,
+                fontWeight: FontWeight.w700),
           ),
         ],
       ),
     );
   }
 
-  Widget _slider(String label, double v, double min, double max, ValueChanged<double> onChanged) {
+  Widget _slider(String label, double v, double min, double max,
+      ValueChanged<double> onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$label: ${v.toStringAsFixed(1)}', style: const TextStyle(color: NeonPalette.text)),
+        Text('$label: ${v.toStringAsFixed(1)}',
+            style: TextStyle(color: AdaptiveColors.text(context))),
         Slider(value: v, min: min, max: max, onChanged: onChanged),
       ],
     );
@@ -389,23 +469,33 @@ class _RightTriangleExplorerState extends State<RightTriangleExplorer> {
             child: SizedBox(
               height: 300,
               child: CustomPaint(
-                painter: _TriangleExplorerPainter(a: a, b: b, c: c, proofMode: proofMode),
+                painter: _TriangleExplorerPainter(
+                    a: a, b: b, c: c, proofMode: proofMode),
                 child: const SizedBox.expand(),
               ),
             ),
           ),
           Row(
             children: [
-              Expanded(child: Text('Opposite: ${bc.toStringAsFixed(1)}', style: const TextStyle(color: Colors.redAccent))),
-              Expanded(child: Text('Adjacent: ${ab.toStringAsFixed(1)}', style: const TextStyle(color: Colors.greenAccent))),
-              Expanded(child: Text('Hypotenuse: ${ca.toStringAsFixed(1)}', style: const TextStyle(color: NeonPalette.purple))),
+              Expanded(
+                  child: Text('Opposite: ${bc.toStringAsFixed(1)}',
+                      style: const TextStyle(color: Colors.redAccent))),
+              Expanded(
+                  child: Text('Adjacent: ${ab.toStringAsFixed(1)}',
+                      style: const TextStyle(color: Colors.greenAccent))),
+              Expanded(
+                  child: Text('Hypotenuse: ${ca.toStringAsFixed(1)}',
+                      style: const TextStyle(color: NeonPalette.purple))),
             ],
           ),
           const SizedBox(height: 6),
-          Text('a² + b² = c²  |  ${lhs.toStringAsFixed(1)} ≈ ${rhs.toStringAsFixed(1)}', style: const TextStyle(color: NeonPalette.cyan)),
+          Text(
+              'a² + b² = c²  |  ${lhs.toStringAsFixed(1)} ≈ ${rhs.toStringAsFixed(1)}',
+              style: const TextStyle(color: NeonPalette.cyan)),
           SwitchListTile(
             value: proofMode,
-            title: const Text('Proof Mode (squares)', style: TextStyle(color: NeonPalette.text)),
+            title: const Text('Proof Mode (squares)',
+                style: TextStyle(color: NeonPalette.text)),
             onChanged: (v) => setState(() => proofMode = v),
           ),
         ],
@@ -437,9 +527,18 @@ class _TangentVisualizerState extends State<TangentVisualizer> {
               child: const SizedBox.expand(),
             ),
           ),
-          Slider(value: angle, min: 1, max: 179, onChanged: (v) => setState(() => angle = v)),
-          Slider(value: zoom, min: 0.6, max: 2.5, onChanged: (v) => setState(() => zoom = v)),
-          Text('tan(θ) = ${tan(angle * pi / 180).isFinite ? tan(angle * pi / 180).toStringAsFixed(3) : '∞'}',
+          Slider(
+              value: angle,
+              min: 1,
+              max: 179,
+              onChanged: (v) => setState(() => angle = v)),
+          Slider(
+              value: zoom,
+              min: 0.6,
+              max: 2.5,
+              onChanged: (v) => setState(() => zoom = v)),
+          Text(
+              'tan(θ) = ${tan(angle * pi / 180).isFinite ? tan(angle * pi / 180).toStringAsFixed(3) : '∞'}',
               style: const TextStyle(color: NeonPalette.pink)),
         ],
       ),
@@ -465,8 +564,9 @@ class _InterferenceVisualizerState extends State<InterferenceVisualizer>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 4))
-      ..repeat();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 4))
+          ..repeat();
   }
 
   @override
@@ -486,26 +586,31 @@ class _InterferenceVisualizerState extends State<InterferenceVisualizer>
               animation: _controller,
               builder: (context, _) {
                 return CustomPaint(
-                  painter: _InterferencePainter(time: _controller.value, a1: a1, f1: f1, a2: a2, f2: f2),
+                  painter: _InterferencePainter(
+                      time: _controller.value, a1: a1, f1: f1, a2: a2, f2: f2),
                   child: const SizedBox.expand(),
                 );
               },
             ),
           ),
           _range('Wave A amplitude', a1, (v) => setState(() => a1 = v)),
-          _range('Wave A frequency', f1, (v) => setState(() => f1 = v), min: 0.5, max: 4),
+          _range('Wave A frequency', f1, (v) => setState(() => f1 = v),
+              min: 0.5, max: 4),
           _range('Wave B amplitude', a2, (v) => setState(() => a2 = v)),
-          _range('Wave B frequency', f2, (v) => setState(() => f2 = v), min: 0.5, max: 4),
+          _range('Wave B frequency', f2, (v) => setState(() => f2 = v),
+              min: 0.5, max: 4),
         ],
       ),
     );
   }
 
-  Widget _range(String label, double value, ValueChanged<double> onChanged, {double min = 0.5, double max = 3}) {
+  Widget _range(String label, double value, ValueChanged<double> onChanged,
+      {double min = 0.5, double max = 3}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$label: ${value.toStringAsFixed(2)}', style: const TextStyle(color: NeonPalette.text)),
+        Text('$label: ${value.toStringAsFixed(2)}',
+            style: const TextStyle(color: NeonPalette.text)),
         Slider(value: value, min: min, max: max, onChanged: onChanged),
       ],
     );
@@ -519,17 +624,29 @@ class _SinePainter extends CustomPainter {
   final double phase;
   final Color color;
 
-  _SinePainter({required this.time, required this.amplitude, required this.frequency, required this.phase, required this.color});
+  _SinePainter(
+      {required this.time,
+      required this.amplitude,
+      required this.frequency,
+      required this.phase,
+      required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final axis = Paint()..color = Colors.white24..strokeWidth = 1;
-    canvas.drawLine(Offset(0, size.height / 2), Offset(size.width, size.height / 2), axis);
-    final p = Paint()..color = color..strokeWidth = 2.5..style = PaintingStyle.stroke;
+    final axis = Paint()
+      ..color = Colors.white24
+      ..strokeWidth = 1;
+    canvas.drawLine(
+        Offset(0, size.height / 2), Offset(size.width, size.height / 2), axis);
+    final p = Paint()
+      ..color = color
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke;
     final path = Path();
     for (double x = 0; x <= size.width; x++) {
       final t = x / size.width * pi * 2;
-      final y = size.height / 2 - sin((t * frequency) + phase) * amplitude * (size.height * 0.28);
+      final y = size.height / 2 -
+          sin((t * frequency) + phase) * amplitude * (size.height * 0.28);
       if (x == 0) {
         path.moveTo(x, y);
       } else {
@@ -539,8 +656,10 @@ class _SinePainter extends CustomPainter {
     canvas.drawPath(path, p);
     final mx = (time * size.width);
     final mt = mx / size.width * pi * 2;
-    final my = size.height / 2 - sin((mt * frequency) + phase) * amplitude * (size.height * 0.28);
-    canvas.drawCircle(Offset(mx, my), 7, Paint()..color = color.withOpacity(0.7));
+    final my = size.height / 2 -
+        sin((mt * frequency) + phase) * amplitude * (size.height * 0.28);
+    canvas.drawCircle(
+        Offset(mx, my), 7, Paint()..color = color.withOpacity(0.7));
     canvas.drawCircle(Offset(mx, my), 4, Paint()..color = Colors.white);
   }
 
@@ -558,9 +677,20 @@ class _UnitCircleLinkPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final r = min(size.width, size.height) * 0.32;
-    canvas.drawCircle(center, r, Paint()..style = PaintingStyle.stroke..color = Colors.white30);
-    final point = Offset(center.dx + cos(angle) * r, center.dy - sin(angle) * r);
-    canvas.drawLine(center, point, Paint()..color = color..strokeWidth = 2.5);
+    canvas.drawCircle(
+        center,
+        r,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..color = Colors.white30);
+    final point =
+        Offset(center.dx + cos(angle) * r, center.dy - sin(angle) * r);
+    canvas.drawLine(
+        center,
+        point,
+        Paint()
+          ..color = color
+          ..strokeWidth = 2.5);
     canvas.drawCircle(point, 6, Paint()..color = color);
   }
 
@@ -579,7 +709,10 @@ class _UnitCircle3DPainter extends CustomPainter {
     final r = min(size.width, size.height) * 0.34;
     final a = angleDeg * pi / 180;
 
-    final circle = Paint()..color = Colors.white24..style = PaintingStyle.stroke..strokeWidth = 1.6;
+    final circle = Paint()
+      ..color = Colors.white24
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6;
     final oval = Rect.fromCenter(center: c, width: r * 2, height: r * 1.55);
     canvas.drawOval(oval, circle);
 
@@ -587,7 +720,11 @@ class _UnitCircle3DPainter extends CustomPainter {
       final sx = i.isEven ? 1 : -1;
       final sy = i < 2 ? -1 : 1;
       final rect = Rect.fromLTWH(c.dx + sx * 36, c.dy + sy * 28, 52, 38);
-      canvas.drawRect(rect, Paint()..color = (sx * sy > 0 ? Colors.green : Colors.red).withOpacity(0.12));
+      canvas.drawRect(
+          rect,
+          Paint()
+            ..color =
+                (sx * sy > 0 ? Colors.green : Colors.red).withOpacity(0.12));
     }
 
     final px = c.dx + cos(a) * r;
@@ -596,52 +733,161 @@ class _UnitCircle3DPainter extends CustomPainter {
     for (double t = 0; t < a; t += 0.04) {
       trail.lineTo(c.dx + cos(t) * r, c.dy - sin(t) * r * 0.78);
     }
-    canvas.drawPath(trail, Paint()..color = NeonPalette.pink.withOpacity(0.55)..style = PaintingStyle.stroke..strokeWidth = 2);
+    canvas.drawPath(
+        trail,
+        Paint()
+          ..color = NeonPalette.pink.withOpacity(0.55)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2);
 
-    canvas.drawLine(c, Offset(px, py), Paint()..color = NeonPalette.cyan..strokeWidth = 2.6);
+    canvas.drawLine(
+        c,
+        Offset(px, py),
+        Paint()
+          ..color = NeonPalette.cyan
+          ..strokeWidth = 2.6);
     canvas.drawCircle(Offset(px, py), 7, Paint()..color = Colors.white);
-    canvas.drawLine(Offset(px, py), Offset(px, c.dy), Paint()..color = Colors.redAccent.withOpacity(0.8));
-    canvas.drawLine(c, Offset(px, c.dy), Paint()..color = Colors.greenAccent.withOpacity(0.8));
+    canvas.drawLine(Offset(px, py), Offset(px, c.dy),
+        Paint()..color = Colors.redAccent.withOpacity(0.8));
+    canvas.drawLine(c, Offset(px, c.dy),
+        Paint()..color = Colors.greenAccent.withOpacity(0.8));
   }
 
   @override
-  bool shouldRepaint(covariant _UnitCircle3DPainter oldDelegate) => oldDelegate.angleDeg != angleDeg;
+  bool shouldRepaint(covariant _UnitCircle3DPainter oldDelegate) =>
+      oldDelegate.angleDeg != angleDeg;
 }
 
 class _ShadowScenePainter extends CustomPainter {
   final double angle;
   final double height;
   final bool night;
+  final double time;
 
-  _ShadowScenePainter({required this.angle, required this.height, required this.night});
+  _ShadowScenePainter(
+      {required this.angle,
+      required this.height,
+      required this.night,
+      required this.time});
 
   @override
   void paint(Canvas canvas, Size size) {
+    final skyRect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final horizonY = size.height * 0.72;
     final sky = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: night ? [const Color(0xFF1F2937), const Color(0xFF7C2D12)] : [const Color(0xFF0EA5E9), const Color(0xFF93C5FD)],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), sky);
-    canvas.drawRect(Rect.fromLTWH(0, size.height * 0.72, size.width, size.height * 0.28), Paint()..color = const Color(0xFF1E293B));
+        colors: night
+            ? [
+                const Color(0xFF13203C),
+                const Color(0xFF6B2C1B),
+                const Color(0xFFDF8B3B)
+              ]
+            : [
+                const Color(0xFF4EA6FF),
+                const Color(0xFF8BD4FF),
+                const Color(0xFFD9F2FF)
+              ],
+      ).createShader(skyRect);
+    canvas.drawRect(skyRect, sky);
 
-    final buildingX = size.width * 0.2;
-    final buildingH = height / 12 * size.height * 0.45;
-    final baseY = size.height * 0.72;
-    canvas.drawRect(Rect.fromLTWH(buildingX, baseY - buildingH, 42, buildingH), Paint()..color = const Color(0xFF334155));
+    final haze = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          Colors.white.withOpacity(night ? 0.04 : 0.18),
+          Colors.transparent
+        ],
+      ).createShader(Rect.fromCircle(
+          center: Offset(size.width * 0.5, horizonY),
+          radius: size.width * 0.7));
+    canvas.drawRect(skyRect, haze);
 
-    const sunR = 20.0;
-    final sunX = size.width * 0.8 - cos(angle * pi / 180) * 120;
-    final sunY = size.height * 0.2 + sin(angle * pi / 180) * 45;
+    final cloudShift = (time * 120) % (size.width + 180);
+    _drawCloud(
+        canvas,
+        Offset((size.width * 0.1 + cloudShift) % (size.width + 180) - 90,
+            size.height * 0.20),
+        night);
+    _drawCloud(
+        canvas,
+        Offset(
+            (size.width * 0.6 + cloudShift * 0.75) % (size.width + 200) - 100,
+            size.height * 0.30),
+        night);
+
+    final mountain = Path()
+      ..moveTo(0, horizonY)
+      ..lineTo(size.width * 0.16, horizonY - 34)
+      ..lineTo(size.width * 0.32, horizonY - 12)
+      ..lineTo(size.width * 0.48, horizonY - 50)
+      ..lineTo(size.width * 0.66, horizonY - 16)
+      ..lineTo(size.width * 0.82, horizonY - 42)
+      ..lineTo(size.width, horizonY - 8)
+      ..lineTo(size.width, horizonY)
+      ..close();
+    canvas.drawPath(
+        mountain,
+        Paint()
+          ..color = const Color(0xFF2A3A5A).withOpacity(night ? 0.55 : 0.35));
+
+    final groundRect =
+        Rect.fromLTWH(0, horizonY, size.width, size.height - horizonY);
+    final ground = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: night
+            ? [const Color(0xFF4A3621), const Color(0xFF2B1D13)]
+            : [const Color(0xFF9B7A38), const Color(0xFF6A5226)],
+      ).createShader(groundRect);
+    canvas.drawRect(groundRect, ground);
+
+    final texture = Paint()
+      ..color = Colors.black.withOpacity(0.08)
+      ..strokeWidth = 1;
+    for (double y = horizonY + 8; y < size.height; y += 12) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y + 4), texture);
+    }
+
+    final buildingX = size.width * 0.20;
+    final buildingH = height / 12 * size.height * 0.50;
+    final baseY = horizonY;
+    final buildingRect =
+        Rect.fromLTWH(buildingX, baseY - buildingH, 54, buildingH);
+    canvas.drawRect(buildingRect, Paint()..color = const Color(0xFF4B5568));
+    canvas.drawRect(
+      Rect.fromLTWH(buildingX + 8, baseY - buildingH + 10, 38, buildingH - 14),
+      Paint()..color = const Color(0xFF6E7B91).withOpacity(0.55),
+    );
+    for (double wy = baseY - buildingH + 16; wy < baseY - 18; wy += 16) {
+      for (double wx = buildingX + 12; wx < buildingX + 42; wx += 14) {
+        canvas.drawRect(
+            Rect.fromLTWH(wx, wy, 8, 10),
+            Paint()
+              ..color =
+                  const Color(0xFFFDE68A).withOpacity(night ? 0.65 : 0.30));
+      }
+    }
+
+    const sunR = 18.0;
+    final sunX = size.width * 0.80 - cos(angle * pi / 180) * 130;
+    final sunY = size.height * 0.18 + sin(angle * pi / 180) * 56;
     final sun = Offset(sunX, sunY);
+    canvas.drawCircle(sun, sunR * 2.8,
+        Paint()..color = const Color(0xFFFFF59D).withOpacity(0.14));
+    canvas.drawCircle(sun, sunR * 1.8,
+        Paint()..color = const Color(0xFFFFE082).withOpacity(0.22));
     canvas.drawCircle(sun, sunR, Paint()..color = const Color(0xFFFDE047));
 
-    final top = Offset(buildingX + 21, baseY - buildingH);
+    final top = Offset(buildingX + 27, baseY - buildingH);
     final shadowLen = height / tan(angle * pi / 180) * 10;
-    final end = Offset(top.dx + shadowLen, baseY);
+    final end =
+        Offset(top.dx + shadowLen.clamp(24.0, size.width * 0.65), baseY);
 
-    final dash = Paint()..color = Colors.yellow.withOpacity(0.7)..strokeWidth = 2;
+    final dash = Paint()
+      ..color = Colors.yellow.withOpacity(0.7)
+      ..strokeWidth = 2;
     for (double t = 0; t < 1; t += 0.08) {
       final p1 = Offset.lerp(sun, top, t)!;
       final p2 = Offset.lerp(sun, top, t + 0.04)!;
@@ -649,18 +895,45 @@ class _ShadowScenePainter extends CustomPainter {
     }
 
     final shadow = Path()
-      ..moveTo(buildingX + 42, baseY)
+      ..moveTo(buildingX + 54, baseY)
       ..lineTo(end.dx, end.dy)
-      ..lineTo(end.dx + 18, end.dy)
-      ..lineTo(buildingX + 42, baseY)
+      ..lineTo(end.dx + 26, end.dy + 3)
+      ..lineTo(buildingX + 54, baseY)
       ..close();
-    canvas.drawPath(shadow, Paint()..color = Colors.black.withOpacity(0.35));
+    canvas.drawPath(shadow, Paint()..color = Colors.black.withOpacity(0.30));
+    canvas.drawPath(
+      shadow,
+      Paint()
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+        ..color = Colors.black.withOpacity(0.16),
+    );
 
-    canvas.drawCircle(Offset(buildingX + 70, baseY - 28), 10, Paint()..color = const Color(0xFFF472B6));
-    canvas.drawRect(Rect.fromLTWH(buildingX + 66, baseY - 18, 8, 20), Paint()..color = const Color(0xFFF472B6));
+    canvas.drawCircle(Offset(buildingX + 80, baseY - 29), 10,
+        Paint()..color = const Color(0xFFFDE68A));
+    canvas.drawRect(Rect.fromLTWH(buildingX + 76, baseY - 18, 8, 20),
+        Paint()..color = const Color(0xFF334155));
+    canvas.drawRect(Rect.fromLTWH(buildingX + 74, baseY - 8, 12, 2),
+        Paint()..color = Colors.black.withOpacity(0.45));
 
-    canvas.drawRect(Rect.fromLTWH(buildingX + 150, baseY - 70, 12, 70), Paint()..color = const Color(0xFF14532D));
-    canvas.drawCircle(Offset(buildingX + 156, baseY - 84), 18, Paint()..color = const Color(0xFF22C55E));
+    canvas.drawRect(Rect.fromLTWH(buildingX + 170, baseY - 74, 12, 74),
+        Paint()..color = const Color(0xFF3F6212));
+    canvas.drawCircle(Offset(buildingX + 176, baseY - 88), 24,
+        Paint()..color = const Color(0xFF4ADE80).withOpacity(0.95));
+    canvas.drawCircle(Offset(buildingX + 164, baseY - 90), 14,
+        Paint()..color = const Color(0xFF22C55E).withOpacity(0.92));
+    canvas.drawCircle(Offset(buildingX + 188, baseY - 86), 16,
+        Paint()..color = const Color(0xFF16A34A).withOpacity(0.90));
+  }
+
+  void _drawCloud(Canvas canvas, Offset center, bool night) {
+    final cloudPaint = Paint()
+      ..color = night
+          ? const Color(0xFFE5E7EB).withOpacity(0.18)
+          : Colors.white.withOpacity(0.68)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawCircle(center, 22, cloudPaint);
+    canvas.drawCircle(Offset(center.dx + 20, center.dy + 4), 18, cloudPaint);
+    canvas.drawCircle(Offset(center.dx - 20, center.dy + 6), 16, cloudPaint);
   }
 
   @override
@@ -673,7 +946,11 @@ class _TriangleExplorerPainter extends CustomPainter {
   final Offset c;
   final bool proofMode;
 
-  _TriangleExplorerPainter({required this.a, required this.b, required this.c, required this.proofMode});
+  _TriangleExplorerPainter(
+      {required this.a,
+      required this.b,
+      required this.c,
+      required this.proofMode});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -681,14 +958,32 @@ class _TriangleExplorerPainter extends CustomPainter {
       final ab = (b - a).distance;
       final bc = (c - b).distance;
       final ca = (a - c).distance;
-      canvas.drawRect(Rect.fromLTWH(a.dx, a.dy - ab, ab, ab), Paint()..color = Colors.green.withOpacity(0.12));
-      canvas.drawRect(Rect.fromLTWH(b.dx, b.dy - bc, bc, bc), Paint()..color = Colors.red.withOpacity(0.12));
-      canvas.drawRect(Rect.fromLTWH(c.dx, c.dy - ca, ca, ca), Paint()..color = NeonPalette.purple.withOpacity(0.12));
+      canvas.drawRect(Rect.fromLTWH(a.dx, a.dy - ab, ab, ab),
+          Paint()..color = Colors.green.withOpacity(0.12));
+      canvas.drawRect(Rect.fromLTWH(b.dx, b.dy - bc, bc, bc),
+          Paint()..color = Colors.red.withOpacity(0.12));
+      canvas.drawRect(Rect.fromLTWH(c.dx, c.dy - ca, ca, ca),
+          Paint()..color = NeonPalette.purple.withOpacity(0.12));
     }
 
-    canvas.drawLine(a, b, Paint()..color = Colors.greenAccent..strokeWidth = 3);
-    canvas.drawLine(b, c, Paint()..color = Colors.redAccent..strokeWidth = 3);
-    canvas.drawLine(c, a, Paint()..color = NeonPalette.purple..strokeWidth = 3);
+    canvas.drawLine(
+        a,
+        b,
+        Paint()
+          ..color = Colors.greenAccent
+          ..strokeWidth = 3);
+    canvas.drawLine(
+        b,
+        c,
+        Paint()
+          ..color = Colors.redAccent
+          ..strokeWidth = 3);
+    canvas.drawLine(
+        c,
+        a,
+        Paint()
+          ..color = NeonPalette.purple
+          ..strokeWidth = 3);
 
     for (final p in [a, b, c]) {
       canvas.drawCircle(p, 9, Paint()..color = Colors.white);
@@ -710,24 +1005,52 @@ class _TangentPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width * 0.2, size.height * 0.5);
     const r = 62.0;
-    canvas.drawCircle(center, r, Paint()..color = Colors.white24..style = PaintingStyle.stroke);
+    canvas.drawCircle(
+        center,
+        r,
+        Paint()
+          ..color = Colors.white24
+          ..style = PaintingStyle.stroke);
     final rad = angle * pi / 180;
     final point = Offset(center.dx + cos(rad) * r, center.dy - sin(rad) * r);
-    canvas.drawLine(center, point, Paint()..color = NeonPalette.cyan..strokeWidth = 2.5);
+    canvas.drawLine(
+        center,
+        point,
+        Paint()
+          ..color = NeonPalette.cyan
+          ..strokeWidth = 2.5);
 
     final tx = center.dx + r;
-    canvas.drawLine(Offset(tx, center.dy - 100), Offset(tx, center.dy + 100), Paint()..color = NeonPalette.pink..strokeWidth = 2);
+    canvas.drawLine(
+        Offset(tx, center.dy - 100),
+        Offset(tx, center.dy + 100),
+        Paint()
+          ..color = NeonPalette.pink
+          ..strokeWidth = 2);
     final tanLen = tan(rad) * r;
     if (tanLen.isFinite) {
-      canvas.drawLine(Offset(tx, center.dy), Offset(tx, center.dy - tanLen.clamp(-130, 130)), Paint()..color = Colors.yellow..strokeWidth = 3);
+      canvas.drawLine(
+          Offset(tx, center.dy),
+          Offset(tx, center.dy - tanLen.clamp(-130, 130)),
+          Paint()
+            ..color = Colors.yellow
+            ..strokeWidth = 3);
     }
 
-    final rect = Rect.fromLTWH(size.width * 0.42, 24, size.width * 0.55, size.height - 48);
-    final axis = Paint()..color = Colors.white24..strokeWidth = 1;
-    canvas.drawLine(Offset(rect.left, rect.center.dy), Offset(rect.right, rect.center.dy), axis);
-    canvas.drawLine(Offset(rect.left, rect.top), Offset(rect.left, rect.bottom), axis);
+    final rect = Rect.fromLTWH(
+        size.width * 0.42, 24, size.width * 0.55, size.height - 48);
+    final axis = Paint()
+      ..color = Colors.white24
+      ..strokeWidth = 1;
+    canvas.drawLine(Offset(rect.left, rect.center.dy),
+        Offset(rect.right, rect.center.dy), axis);
+    canvas.drawLine(
+        Offset(rect.left, rect.top), Offset(rect.left, rect.bottom), axis);
 
-    final p = Paint()..color = NeonPalette.cyan..strokeWidth = 2..style = PaintingStyle.stroke;
+    final p = Paint()
+      ..color = NeonPalette.cyan
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
     final path = Path();
     bool started = false;
     for (double x = -pi; x <= pi; x += 0.02) {
@@ -749,8 +1072,14 @@ class _TangentPainter extends CustomPainter {
 
     for (final a in [-pi / 2, pi / 2]) {
       final x = rect.left + (a + pi) / (2 * pi) * rect.width;
-      canvas.drawLine(Offset(x, rect.top), Offset(x, rect.bottom), Paint()..color = Colors.redAccent.withOpacity(0.7)..strokeWidth = 1.3);
-      canvas.drawCircle(Offset(x, rect.center.dy), 4, Paint()..color = Colors.redAccent);
+      canvas.drawLine(
+          Offset(x, rect.top),
+          Offset(x, rect.bottom),
+          Paint()
+            ..color = Colors.redAccent.withOpacity(0.7)
+            ..strokeWidth = 1.3);
+      canvas.drawCircle(
+          Offset(x, rect.center.dy), 4, Paint()..color = Colors.redAccent);
     }
   }
 
@@ -765,25 +1094,41 @@ class _InterferencePainter extends CustomPainter {
   final double a2;
   final double f2;
 
-  _InterferencePainter({required this.time, required this.a1, required this.f1, required this.a2, required this.f2});
+  _InterferencePainter(
+      {required this.time,
+      required this.a1,
+      required this.f1,
+      required this.a2,
+      required this.f2});
 
   @override
   void paint(Canvas canvas, Size size) {
     final cY = size.height * 0.5;
-    canvas.drawLine(Offset(0, cY), Offset(size.width, cY), Paint()..color = Colors.white24);
+    canvas.drawLine(
+        Offset(0, cY), Offset(size.width, cY), Paint()..color = Colors.white24);
 
-    _drawWave(canvas, size, cY, a1, f1, time, NeonPalette.cyan.withOpacity(0.7));
-    _drawWave(canvas, size, cY, a2, f2, time + 0.25, NeonPalette.pink.withOpacity(0.7));
+    _drawWave(
+        canvas, size, cY, a1, f1, time, NeonPalette.cyan.withOpacity(0.7));
+    _drawWave(canvas, size, cY, a2, f2, time + 0.25,
+        NeonPalette.pink.withOpacity(0.7));
     _drawWave(canvas, size, cY, 1, 1, time, Colors.amber, combine: true);
   }
 
-  void _drawWave(Canvas canvas, Size size, double cY, double amp, double freq, double t, Color color, {bool combine = false}) {
-    final p = Paint()..color = color..strokeWidth = combine ? 3 : 1.7..style = PaintingStyle.stroke;
+  void _drawWave(Canvas canvas, Size size, double cY, double amp, double freq,
+      double t, Color color,
+      {bool combine = false}) {
+    final p = Paint()
+      ..color = color
+      ..strokeWidth = combine ? 3 : 1.7
+      ..style = PaintingStyle.stroke;
     final path = Path();
     for (double x = 0; x <= size.width; x++) {
       final k = x / size.width * pi * 8;
       final y = combine
-          ? cY - (sin(k * f1 + t * pi * 2) * a1 + sin(k * f2 + (t + 0.25) * pi * 2) * a2) * 22
+          ? cY -
+              (sin(k * f1 + t * pi * 2) * a1 +
+                      sin(k * f2 + (t + 0.25) * pi * 2) * a2) *
+                  22
           : cY - sin(k * freq + t * pi * 2) * amp * 22;
       if (x == 0) {
         path.moveTo(x, y);
@@ -791,7 +1136,8 @@ class _InterferencePainter extends CustomPainter {
         path.lineTo(x, y);
       }
       if (combine && x % 24 == 0) {
-        canvas.drawCircle(Offset(x, y), 2.5, Paint()..color = Colors.white.withOpacity(0.65));
+        canvas.drawCircle(
+            Offset(x, y), 2.5, Paint()..color = Colors.white.withOpacity(0.65));
       }
     }
     canvas.drawPath(path, p);
