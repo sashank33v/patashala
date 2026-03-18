@@ -300,8 +300,6 @@ class _PerimeterInteractiveState extends State<PerimeterInteractive>
                         width: width,
                         isSquare: isSquare,
                         phase: _edgeAnim.value,
-                        darkMode:
-                            Theme.of(context).brightness == Brightness.dark,
                       ),
                       child: const SizedBox.expand(),
                     ),
@@ -488,31 +486,26 @@ class _HintSteps extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor = AdaptiveColors.text(context);
-    final subtextColor = AdaptiveColors.subtext(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color:
-            isDark ? Colors.white.withOpacity(0.05) : const Color(0xFFFFEEF6),
-        border: Border.all(
-            color: isDark ? Colors.white12 : const Color(0x330F172A)),
+        color: Colors.white.withOpacity(0.05),
+        border: Border.all(color: Colors.white12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title,
-              style: TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.w900, color: textColor)),
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w900)),
           const SizedBox(height: 6),
           for (int i = 0; i < steps.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Text('${i + 1}. ${steps[i]}',
-                  style: TextStyle(color: subtextColor)),
+                  style: const TextStyle(color: NeonPalette.subtext)),
             ),
         ],
       ),
@@ -527,21 +520,20 @@ class _Stage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       height: 340,
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-            color: isDark ? Colors.white12 : const Color(0x330F172A)),
+        border: Border.all(color: Colors.white12),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: isDark
-              ? [Colors.white.withOpacity(0.08), Colors.white.withOpacity(0.02)]
-              : [const Color(0xFFFFF1F8), const Color(0xFFFFEAF4)],
+          colors: [
+            Colors.white.withOpacity(0.08),
+            Colors.white.withOpacity(0.02)
+          ],
         ),
       ),
       child: child,
@@ -654,14 +646,12 @@ class _PerimeterGamePainter extends CustomPainter {
   final double width;
   final bool isSquare;
   final double phase;
-  final bool darkMode;
 
   _PerimeterGamePainter({
     required this.length,
     required this.width,
     required this.isSquare,
     required this.phase,
-    required this.darkMode,
   });
 
   @override
@@ -708,11 +698,10 @@ class _PerimeterGamePainter extends CustomPainter {
       text: isSquare
           ? 'Drag top-right vertex | Side=${length.toStringAsFixed(0)}'
           : 'Drag top-right vertex | L=${length.toStringAsFixed(0)} W=${width.toStringAsFixed(0)}',
-      style: TextStyle(
-        color: darkMode ? NeonPalette.subtext : Colors.black,
-        fontSize: 13,
-        fontWeight: FontWeight.w700,
-      ),
+      style: const TextStyle(
+          color: NeonPalette.subtext,
+          fontSize: 13,
+          fontWeight: FontWeight.w700),
     );
     tp.layout(maxWidth: size.width - 16);
     tp.paint(canvas, const Offset(10, 8));
@@ -723,8 +712,7 @@ class _PerimeterGamePainter extends CustomPainter {
     return oldDelegate.length != length ||
         oldDelegate.width != width ||
         oldDelegate.isSquare != isSquare ||
-        oldDelegate.phase != phase ||
-        oldDelegate.darkMode != darkMode;
+        oldDelegate.phase != phase;
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
-import '../services/app_strings.dart';
 import '../widgets/neon_ui.dart';
 import '../widgets/topic_card.dart';
 import 'visualization_screen.dart';
@@ -36,9 +35,8 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedSubject == null
-            ? AppStrings.t('choose_subject')
-            : AppStrings.t('choose_topic_subject')
-                .replaceFirst('{subject}', selectedSubject!)),
+            ? 'Choose Subject'
+            : 'Choose Topic - $selectedSubject'),
       ),
       body: MeshBackground(
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -83,46 +81,49 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(AppStrings.t('select_subject'),
+                        Text('Select a Subject',
                             style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w900,
                                 color: textColor)),
                         const SizedBox(height: 6),
-                        Text(AppStrings.t('subject_pick_desc'),
+                        Text(
+                            'Pick a subject to explore interactive visual learning.',
                             style: TextStyle(color: subtextColor)),
                       ],
                     ),
                   ),
                   const SizedBox(height: 12),
                   _subjectCard(
-                    title: AppStrings.t('subject_maths'),
-                    subtitle: AppStrings.t('maths_subtitle'),
+                    title: 'Maths',
+                    subtitle: 'Trigonometry + Mensuration',
                     gradient: const [NeonPalette.purple, NeonPalette.cyan],
                     icon: Icons.calculate_rounded,
                     onTap: () => setState(() => selectedSubject = 'Maths'),
                   ),
                   const SizedBox(height: 10),
                   _subjectCard(
-                    title: AppStrings.t('subject_chemistry'),
-                    subtitle: AppStrings.t('chem_subtitle'),
+                    title: 'Chemistry',
+                    subtitle: 'Interactive chemistry labs (coming soon)',
                     gradient: const [Color(0xFF0EA5E9), Color(0xFF22C55E)],
                     icon: Icons.science_rounded,
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppStrings.t('chem_coming'))),
+                        const SnackBar(
+                            content: Text('Chemistry topics are coming soon.')),
                       );
                     },
                   ),
                   const SizedBox(height: 10),
                   _subjectCard(
-                    title: AppStrings.t('subject_physics'),
-                    subtitle: AppStrings.t('physics_subtitle'),
+                    title: 'Physics',
+                    subtitle: 'Interactive physics simulations (coming soon)',
                     gradient: const [Color(0xFFF97316), Color(0xFFEC4899)],
                     icon: Icons.bolt_rounded,
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppStrings.t('physics_coming'))),
+                        const SnackBar(
+                            content: Text('Physics topics are coming soon.')),
                       );
                     },
                   ),
@@ -132,7 +133,7 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
 
             if (selectedSubject != 'Maths') {
               return Center(
-                child: Text(AppStrings.t('select_maths_hint'),
+                child: Text('Select Maths to view available topics.',
                     style: TextStyle(color: textColor)),
               );
             }
@@ -150,16 +151,14 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
                           filter = 'All';
                         }),
                         icon: const Icon(Icons.arrow_back, size: 16),
-                        label: Text(AppStrings.t('subjects')),
+                        label: const Text('Subjects'),
                       ),
                       const SizedBox(width: 8),
-                      _filterChip('All', AppStrings.t('filter_all')),
+                      _filterChip('All', 'All'),
                       const SizedBox(width: 8),
-                      _filterChip(
-                          'Trigonometry', AppStrings.t('filter_trigonometry')),
+                      _filterChip('Trigonometry', 'Trigonometry'),
                       const SizedBox(width: 8),
-                      _filterChip(
-                          'Mensuration', AppStrings.t('filter_mensuration')),
+                      _filterChip('Mensuration', 'Mensuration'),
                     ],
                   ),
                 ),

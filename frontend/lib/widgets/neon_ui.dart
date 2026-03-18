@@ -20,7 +20,7 @@ class AdaptiveColors {
       isDark(context) ? NeonPalette.text : const Color(0xFF111827);
 
   static Color subtext(BuildContext context) =>
-      isDark(context) ? NeonPalette.subtext : Colors.black;
+      isDark(context) ? NeonPalette.subtext : const Color(0xFF374151);
 }
 
 class MeshBackground extends StatelessWidget {
@@ -38,7 +38,7 @@ class MeshBackground extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: isDark
               ? const [Color(0xFF090D18), Color(0xFF10192B), Color(0xFF110F22)]
-              : const [Color(0xFFFFEFF6), Color(0xFFFFE4F1), Color(0xFFFFF1F8)],
+              : const [Color(0xFFF9FAFF), Color(0xFFEFF4FF), Color(0xFFF7F7FF)],
         ),
       ),
       child: Stack(
@@ -111,8 +111,8 @@ class GlassCard extends StatelessWidget {
                       Colors.white.withOpacity(0.04)
                     ]
                   : [
-                      const Color(0xFFFFF2F8).withOpacity(0.94),
-                      const Color(0xFFFFE8F3).withOpacity(0.88)
+                      Colors.white.withOpacity(0.90),
+                      Colors.white.withOpacity(0.72)
                     ],
             ),
           ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
-import '../services/app_strings.dart';
 import '../widgets/mensuration_visualizations.dart';
 import '../widgets/neon_ui.dart';
 import '../widgets/trig_visualizations.dart';
@@ -26,7 +25,6 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
     final id = widget.topic['id'].toString();
     final isMens = id.startsWith('mens-');
     final notes = _notesForTopic(id);
-    final subtextColor = AdaptiveColors.subtext(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +47,7 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                       Text(
                           widget.topic['description']?.toString() ??
                               'Interactive explorer',
-                          style: TextStyle(color: subtextColor)),
+                          style: const TextStyle(color: NeonPalette.subtext)),
                     ],
                   ),
                 ),
@@ -110,9 +108,7 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                             Icon(completed ? Icons.check_circle : Icons.flag,
                                 size: 18),
                             const SizedBox(width: 8),
-                            Text(completed
-                                ? AppStrings.t('completed')
-                                : AppStrings.t('mark_complete')),
+                            Text(completed ? 'Completed' : 'Mark Complete'),
                           ],
                         ),
                       ),
@@ -126,7 +122,7 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                               builder: (_) => QuizScreen(
                                   userId: widget.userId, topic: widget.topic)),
                         ),
-                        child: Center(child: Text(AppStrings.t('mini_quiz'))),
+                        child: const Center(child: Text('Mini Quiz')),
                       ),
                     ),
                   ],
@@ -213,7 +209,7 @@ class _NotesPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppStrings.t('reading_notes'),
+        Text('Reading Notes',
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.w900, color: titleColor)),
         const SizedBox(height: 6),

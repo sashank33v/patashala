@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../services/app_strings.dart';
 import 'neon_ui.dart';
 
 class TrigVisualizationHub extends StatefulWidget {
@@ -265,9 +264,8 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
                       radians
                           ? 'Angle: ${(angle * pi / 180).toStringAsFixed(3)} rad'
                           : 'Angle: ${angle.toStringAsFixed(1)}°',
-                      style: TextStyle(
-                          color: AdaptiveColors.text(context),
-                          fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                          color: NeonPalette.text, fontWeight: FontWeight.w700),
                     ),
                     Slider(
                       value: angle,
@@ -291,14 +289,14 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
           SwitchListTile.adaptive(
             activeColor: NeonPalette.pink,
             value: radians,
-            title: Text('Radians mode',
-                style: TextStyle(color: AdaptiveColors.text(context))),
+            title: const Text('Radians mode',
+                style: TextStyle(color: NeonPalette.text)),
             onChanged: (v) => setState(() => radians = v),
             subtitle: Text(
               radians
                   ? '${(angle * pi / 180).toStringAsFixed(3)} rad'
                   : '${angle.toStringAsFixed(1)}°',
-              style: TextStyle(color: AdaptiveColors.subtext(context)),
+              style: const TextStyle(color: NeonPalette.subtext),
             ),
           ),
         ],
@@ -316,8 +314,7 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              Text(title,
-                  style: TextStyle(color: AdaptiveColors.subtext(context))),
+              Text(title, style: const TextStyle(color: NeonPalette.subtext)),
               TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: value.isFinite ? value : 0),
                 duration: const Duration(milliseconds: 300),
@@ -342,31 +339,14 @@ class ShadowHeightVisualizer extends StatefulWidget {
   State<ShadowHeightVisualizer> createState() => _ShadowHeightVisualizerState();
 }
 
-class _ShadowHeightVisualizerState extends State<ShadowHeightVisualizer>
-    with SingleTickerProviderStateMixin {
+class _ShadowHeightVisualizerState extends State<ShadowHeightVisualizer> {
   double angle = 40;
   double height = 6;
   bool night = false;
-  late final AnimationController _sceneAnim;
-
-  @override
-  void initState() {
-    super.initState();
-    _sceneAnim =
-        AnimationController(vsync: this, duration: const Duration(seconds: 20))
-          ..repeat();
-  }
-
-  @override
-  void dispose() {
-    _sceneAnim.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final shadow = height / tan(angle * pi / 180);
-    final textColor = AdaptiveColors.text(context);
     return RepaintBoundary(
       child: Column(
         children: [
@@ -375,38 +355,26 @@ class _ShadowHeightVisualizerState extends State<ShadowHeightVisualizer>
             child: InteractiveViewer(
               minScale: 0.8,
               maxScale: 2,
-              child: AnimatedBuilder(
-                animation: _sceneAnim,
-                builder: (context, _) => CustomPaint(
-                  painter: _ShadowScenePainter(
-                    angle: angle,
-                    height: height,
-                    night: night,
-                    time: _sceneAnim.value,
-                  ),
-                  child: const SizedBox.expand(),
-                ),
+              child: CustomPaint(
+                painter: _ShadowScenePainter(
+                    angle: angle, height: height, night: night),
+                child: const SizedBox.expand(),
               ),
             ),
           ),
           SwitchListTile(
             value: night,
             activeColor: NeonPalette.pink,
-            title: Text(AppStrings.t('day_sunset'),
-                style: TextStyle(color: textColor)),
+            title: const Text('Day / Sunset',
+                style: TextStyle(color: NeonPalette.text)),
             onChanged: (v) => setState(() => night = v),
           ),
-          _slider(AppStrings.t('sun_angle'), angle, 10, 80,
-              (v) => setState(() => angle = v)),
-          _slider(AppStrings.t('building_height'), height, 2, 12,
+          _slider('Sun Angle', angle, 10, 80, (v) => setState(() => angle = v)),
+          _slider('Building Height', height, 2, 12,
               (v) => setState(() => height = v)),
           Text(
-            '${AppStrings.t('shadow_formula')} => ${shadow.toStringAsFixed(2)} m',
-            style: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? NeonPalette.cyan
-                    : Colors.black,
-                fontWeight: FontWeight.w700),
+            'shadow = height / tan(θ) => ${shadow.toStringAsFixed(2)} m',
+            style: const TextStyle(color: NeonPalette.cyan),
           ),
         ],
       ),
@@ -419,7 +387,7 @@ class _ShadowHeightVisualizerState extends State<ShadowHeightVisualizer>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('$label: ${v.toStringAsFixed(1)}',
-            style: TextStyle(color: AdaptiveColors.text(context))),
+            style: const TextStyle(color: NeonPalette.text)),
         Slider(value: v, min: min, max: max, onChanged: onChanged),
       ],
     );
@@ -762,128 +730,40 @@ class _ShadowScenePainter extends CustomPainter {
   final double angle;
   final double height;
   final bool night;
-  final double time;
 
   _ShadowScenePainter(
-      {required this.angle,
-      required this.height,
-      required this.night,
-      required this.time});
+      {required this.angle, required this.height, required this.night});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final skyRect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final horizonY = size.height * 0.72;
     final sky = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: night
-            ? [
-                const Color(0xFF13203C),
-                const Color(0xFF6B2C1B),
-                const Color(0xFFDF8B3B)
-              ]
-            : [
-                const Color(0xFF4EA6FF),
-                const Color(0xFF8BD4FF),
-                const Color(0xFFD9F2FF)
-              ],
-      ).createShader(skyRect);
-    canvas.drawRect(skyRect, sky);
-
-    final haze = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          Colors.white.withOpacity(night ? 0.04 : 0.18),
-          Colors.transparent
-        ],
-      ).createShader(Rect.fromCircle(
-          center: Offset(size.width * 0.5, horizonY),
-          radius: size.width * 0.7));
-    canvas.drawRect(skyRect, haze);
-
-    final cloudShift = (time * 120) % (size.width + 180);
-    _drawCloud(
-        canvas,
-        Offset((size.width * 0.1 + cloudShift) % (size.width + 180) - 90,
-            size.height * 0.20),
-        night);
-    _drawCloud(
-        canvas,
-        Offset(
-            (size.width * 0.6 + cloudShift * 0.75) % (size.width + 200) - 100,
-            size.height * 0.30),
-        night);
-
-    final mountain = Path()
-      ..moveTo(0, horizonY)
-      ..lineTo(size.width * 0.16, horizonY - 34)
-      ..lineTo(size.width * 0.32, horizonY - 12)
-      ..lineTo(size.width * 0.48, horizonY - 50)
-      ..lineTo(size.width * 0.66, horizonY - 16)
-      ..lineTo(size.width * 0.82, horizonY - 42)
-      ..lineTo(size.width, horizonY - 8)
-      ..lineTo(size.width, horizonY)
-      ..close();
-    canvas.drawPath(
-        mountain,
-        Paint()
-          ..color = const Color(0xFF2A3A5A).withOpacity(night ? 0.55 : 0.35));
-
-    final groundRect =
-        Rect.fromLTWH(0, horizonY, size.width, size.height - horizonY);
-    final ground = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: night
-            ? [const Color(0xFF4A3621), const Color(0xFF2B1D13)]
-            : [const Color(0xFF9B7A38), const Color(0xFF6A5226)],
-      ).createShader(groundRect);
-    canvas.drawRect(groundRect, ground);
-
-    final texture = Paint()
-      ..color = Colors.black.withOpacity(0.08)
-      ..strokeWidth = 1;
-    for (double y = horizonY + 8; y < size.height; y += 12) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y + 4), texture);
-    }
-
-    final buildingX = size.width * 0.20;
-    final buildingH = height / 12 * size.height * 0.50;
-    final baseY = horizonY;
-    final buildingRect =
-        Rect.fromLTWH(buildingX, baseY - buildingH, 54, buildingH);
-    canvas.drawRect(buildingRect, Paint()..color = const Color(0xFF4B5568));
+            ? [const Color(0xFF1F2937), const Color(0xFF7C2D12)]
+            : [const Color(0xFF0EA5E9), const Color(0xFF93C5FD)],
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), sky);
     canvas.drawRect(
-      Rect.fromLTWH(buildingX + 8, baseY - buildingH + 10, 38, buildingH - 14),
-      Paint()..color = const Color(0xFF6E7B91).withOpacity(0.55),
-    );
-    for (double wy = baseY - buildingH + 16; wy < baseY - 18; wy += 16) {
-      for (double wx = buildingX + 12; wx < buildingX + 42; wx += 14) {
-        canvas.drawRect(
-            Rect.fromLTWH(wx, wy, 8, 10),
-            Paint()
-              ..color =
-                  const Color(0xFFFDE68A).withOpacity(night ? 0.65 : 0.30));
-      }
-    }
+        Rect.fromLTWH(0, size.height * 0.72, size.width, size.height * 0.28),
+        Paint()..color = const Color(0xFF1E293B));
 
-    const sunR = 18.0;
-    final sunX = size.width * 0.80 - cos(angle * pi / 180) * 130;
-    final sunY = size.height * 0.18 + sin(angle * pi / 180) * 56;
+    final buildingX = size.width * 0.2;
+    final buildingH = height / 12 * size.height * 0.45;
+    final baseY = size.height * 0.72;
+    canvas.drawRect(Rect.fromLTWH(buildingX, baseY - buildingH, 42, buildingH),
+        Paint()..color = const Color(0xFF334155));
+
+    const sunR = 20.0;
+    final sunX = size.width * 0.8 - cos(angle * pi / 180) * 120;
+    final sunY = size.height * 0.2 + sin(angle * pi / 180) * 45;
     final sun = Offset(sunX, sunY);
-    canvas.drawCircle(sun, sunR * 2.8,
-        Paint()..color = const Color(0xFFFFF59D).withOpacity(0.14));
-    canvas.drawCircle(sun, sunR * 1.8,
-        Paint()..color = const Color(0xFFFFE082).withOpacity(0.22));
     canvas.drawCircle(sun, sunR, Paint()..color = const Color(0xFFFDE047));
 
-    final top = Offset(buildingX + 27, baseY - buildingH);
+    final top = Offset(buildingX + 21, baseY - buildingH);
     final shadowLen = height / tan(angle * pi / 180) * 10;
-    final end =
-        Offset(top.dx + shadowLen.clamp(24.0, size.width * 0.65), baseY);
+    final end = Offset(top.dx + shadowLen, baseY);
 
     final dash = Paint()
       ..color = Colors.yellow.withOpacity(0.7)
@@ -895,45 +775,22 @@ class _ShadowScenePainter extends CustomPainter {
     }
 
     final shadow = Path()
-      ..moveTo(buildingX + 54, baseY)
+      ..moveTo(buildingX + 42, baseY)
       ..lineTo(end.dx, end.dy)
-      ..lineTo(end.dx + 26, end.dy + 3)
-      ..lineTo(buildingX + 54, baseY)
+      ..lineTo(end.dx + 18, end.dy)
+      ..lineTo(buildingX + 42, baseY)
       ..close();
-    canvas.drawPath(shadow, Paint()..color = Colors.black.withOpacity(0.30));
-    canvas.drawPath(
-      shadow,
-      Paint()
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
-        ..color = Colors.black.withOpacity(0.16),
-    );
+    canvas.drawPath(shadow, Paint()..color = Colors.black.withOpacity(0.35));
 
-    canvas.drawCircle(Offset(buildingX + 80, baseY - 29), 10,
-        Paint()..color = const Color(0xFFFDE68A));
-    canvas.drawRect(Rect.fromLTWH(buildingX + 76, baseY - 18, 8, 20),
-        Paint()..color = const Color(0xFF334155));
-    canvas.drawRect(Rect.fromLTWH(buildingX + 74, baseY - 8, 12, 2),
-        Paint()..color = Colors.black.withOpacity(0.45));
+    canvas.drawCircle(Offset(buildingX + 70, baseY - 28), 10,
+        Paint()..color = const Color(0xFFF472B6));
+    canvas.drawRect(Rect.fromLTWH(buildingX + 66, baseY - 18, 8, 20),
+        Paint()..color = const Color(0xFFF472B6));
 
-    canvas.drawRect(Rect.fromLTWH(buildingX + 170, baseY - 74, 12, 74),
-        Paint()..color = const Color(0xFF3F6212));
-    canvas.drawCircle(Offset(buildingX + 176, baseY - 88), 24,
-        Paint()..color = const Color(0xFF4ADE80).withOpacity(0.95));
-    canvas.drawCircle(Offset(buildingX + 164, baseY - 90), 14,
-        Paint()..color = const Color(0xFF22C55E).withOpacity(0.92));
-    canvas.drawCircle(Offset(buildingX + 188, baseY - 86), 16,
-        Paint()..color = const Color(0xFF16A34A).withOpacity(0.90));
-  }
-
-  void _drawCloud(Canvas canvas, Offset center, bool night) {
-    final cloudPaint = Paint()
-      ..color = night
-          ? const Color(0xFFE5E7EB).withOpacity(0.18)
-          : Colors.white.withOpacity(0.68)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
-    canvas.drawCircle(center, 22, cloudPaint);
-    canvas.drawCircle(Offset(center.dx + 20, center.dy + 4), 18, cloudPaint);
-    canvas.drawCircle(Offset(center.dx - 20, center.dy + 6), 16, cloudPaint);
+    canvas.drawRect(Rect.fromLTWH(buildingX + 150, baseY - 70, 12, 70),
+        Paint()..color = const Color(0xFF14532D));
+    canvas.drawCircle(Offset(buildingX + 156, baseY - 84), 18,
+        Paint()..color = const Color(0xFF22C55E));
   }
 
   @override

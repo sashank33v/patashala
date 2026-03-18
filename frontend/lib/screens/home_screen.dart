@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
-import '../services/app_strings.dart';
 import '../services/local_prefs.dart';
 import '../widgets/neon_ui.dart';
 import '../widgets/progress_ring.dart';
@@ -61,17 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final subtextColor = AdaptiveColors.subtext(context);
     return Scaffold(
       endDrawer: Drawer(
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? const Color(0xFF0A1024)
-            : const Color(0xFFFFEAF3),
+        backgroundColor: const Color(0xFF0A1024),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
           children: [
-            Text(AppStrings.t('home_settings'),
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: textColor)),
+            const Text('Home Settings',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
             const SizedBox(height: 16),
             if (!_settingsLoaded)
               const Center(
@@ -79,65 +73,42 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.all(20),
                       child: CircularProgressIndicator()))
             else ...[
-              Text(AppStrings.t('appearance'),
-                  style: TextStyle(color: subtextColor)),
+              Text('Appearance', style: TextStyle(color: subtextColor)),
               SwitchListTile(
                 value: _settings.darkMode,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(darkMode: v)),
-                title: Text(_settings.darkMode
-                    ? AppStrings.t('dark_mode')
-                    : AppStrings.t('bright_mode')),
+                title: Text(_settings.darkMode ? 'Dark Mode' : 'Bright Mode'),
               ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(AppStrings.t('language'),
-                    style: TextStyle(color: textColor)),
-                trailing: DropdownButton<String>(
-                  value: _settings.languageCode,
-                  items: [
-                    DropdownMenuItem(
-                        value: 'en', child: Text(AppStrings.t('english'))),
-                    DropdownMenuItem(
-                        value: 'te', child: Text(AppStrings.t('telugu'))),
-                  ],
-                  onChanged: (v) {
-                    if (v == null) return;
-                    _updateSettings(_settings.copyWith(languageCode: v));
-                  },
-                ),
-              ),
-              Text(AppStrings.t('learning_boost'),
-                  style: TextStyle(color: subtextColor)),
+              Text('Learning Boost', style: TextStyle(color: subtextColor)),
               SwitchListTile(
                 value: _settings.showHints,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(showHints: v)),
-                title: Text(AppStrings.t('show_hints')),
+                title: const Text('Show Formula Hints'),
               ),
               SwitchListTile(
                 value: _settings.autoPlay,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(autoPlay: v)),
-                title: Text(AppStrings.t('autoplay_visuals')),
+                title: const Text('Auto-play Visuals'),
               ),
-              Text(AppStrings.t('experience'),
-                  style: TextStyle(color: subtextColor)),
+              Text('Experience', style: TextStyle(color: subtextColor)),
               SwitchListTile(
                 value: _settings.soundEffects,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(soundEffects: v)),
-                title: Text(AppStrings.t('sound_effects')),
+                title: const Text('Sound Effects'),
               ),
               SwitchListTile(
                 value: _settings.haptics,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(haptics: v)),
-                title: Text(AppStrings.t('haptic_feedback')),
+                title: const Text('Haptic Feedback'),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text(AppStrings.t('text_size')),
+                title: const Text('Text Size'),
                 subtitle: Slider(
                   value: _settings.textScale,
                   min: 0.8,
@@ -152,8 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ListTile(
                 onTap: _logout,
                 leading: const Icon(Icons.logout, color: Colors.redAccent),
-                title: Text(AppStrings.t('logout'),
-                    style: const TextStyle(color: Colors.redAccent)),
+                title: const Text('Logout',
+                    style: TextStyle(color: Colors.redAccent)),
               ),
             ],
           ],
@@ -211,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fontWeight: FontWeight.w800,
                                       color: textColor)),
                               const SizedBox(height: 4),
-                              Text(AppStrings.t('streak_days'),
+                              Text('Streak: 5 days',
                                   style: TextStyle(color: subtextColor)),
                             ],
                           ),
@@ -221,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  Text(AppStrings.t('featured_topics'),
+                  Text('Featured Topics',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
@@ -263,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  Text(AppStrings.t('all_topics'),
+                  Text('All Topics',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
@@ -275,15 +246,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         MaterialPageRoute(
                             builder: (_) =>
                                 TopicSelectionScreen(userId: widget.userId))),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(Icons.grid_view_rounded,
-                            color: NeonPalette.cyan),
-                        const SizedBox(width: 10),
+                        Icon(Icons.grid_view_rounded, color: NeonPalette.cyan),
+                        SizedBox(width: 10),
                         Expanded(
-                            child: Text(AppStrings.t('browse_topics'),
-                                style: TextStyle(color: textColor))),
-                        const Icon(Icons.arrow_forward_ios, size: 14),
+                            child: Text(
+                                'Browse Trigonometry + Mensuration topics')),
+                        Icon(Icons.arrow_forward_ios, size: 14),
                       ],
                     ),
                   ),
@@ -294,15 +264,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         MaterialPageRoute(
                             builder: (_) => ProgressDashboardScreen(
                                 userId: widget.userId))),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(Icons.bar_chart_rounded,
-                            color: NeonPalette.pink),
-                        const SizedBox(width: 10),
-                        Expanded(
-                            child: Text(AppStrings.t('open_progress'),
-                                style: TextStyle(color: textColor))),
-                        const Icon(Icons.arrow_forward_ios, size: 14),
+                        Icon(Icons.bar_chart_rounded, color: NeonPalette.pink),
+                        SizedBox(width: 10),
+                        Expanded(child: Text('Open Progress Dashboard')),
+                        Icon(Icons.arrow_forward_ios, size: 14),
                       ],
                     ),
                   ),

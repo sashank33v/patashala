@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
-import '../services/app_strings.dart';
 import '../services/local_prefs.dart';
 import '../widgets/neon_ui.dart';
 import 'home_screen.dart';
@@ -265,9 +264,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = AdaptiveColors.text(context);
-    final subtextColor = AdaptiveColors.subtext(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: MeshBackground(
         child: SafeArea(
@@ -290,17 +286,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(AppStrings.t('app_name'),
+                                  const Text('Patashala',
                                       style: TextStyle(
                                           fontSize: 44,
-                                          fontWeight: FontWeight.w900,
-                                          color: textColor)),
+                                          fontWeight: FontWeight.w900)),
                                   const SizedBox(height: 6),
-                                  Text(
+                                  const Text(
                                     'Learn Trigonometry + Mensuration with interactive visuals.',
                                     style: TextStyle(
                                         fontSize: 18,
-                                        color: subtextColor,
+                                        color: NeonPalette.subtext,
                                         fontWeight: FontWeight.w600),
                                   ),
                                   const SizedBox(height: 26),
@@ -323,12 +318,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ],
                                   ),
                                   const SizedBox(height: 28),
-                                  Text(
+                                  const Text(
                                     'Tip: Use `student / student123` for demo login.',
                                     style: TextStyle(
-                                        color: isDark
-                                            ? NeonPalette.cyan
-                                            : Colors.black,
+                                        color: NeonPalette.cyan,
                                         fontWeight: FontWeight.w700),
                                   ),
                                 ],
@@ -342,27 +335,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(AppStrings.t('login_title'),
+                                  const Text('Welcome Back',
                                       style: TextStyle(
                                           fontSize: 32,
-                                          fontWeight: FontWeight.w900,
-                                          color: textColor)),
+                                          fontWeight: FontWeight.w900)),
                                   const SizedBox(height: 6),
-                                  Text(AppStrings.t('login_subtitle'),
-                                      style: TextStyle(color: subtextColor)),
+                                  const Text('Login with username and password',
+                                      style: TextStyle(
+                                          color: NeonPalette.subtext)),
                                   const SizedBox(height: 20),
                                   TextField(
                                     controller: usernameCtrl,
-                                    decoration: InputDecoration(
-                                        labelText: AppStrings.t('username'),
-                                        border: const OutlineInputBorder()),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Username',
+                                        border: OutlineInputBorder()),
                                   ),
                                   const SizedBox(height: 12),
                                   TextField(
                                     controller: passwordCtrl,
                                     obscureText: obscure,
                                     decoration: InputDecoration(
-                                      labelText: AppStrings.t('password'),
+                                      labelText: 'Password',
                                       border: const OutlineInputBorder(),
                                       suffixIcon: IconButton(
                                         onPressed: () =>
@@ -381,8 +374,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         onChanged: (value) => setState(
                                             () => rememberMe = value ?? true),
                                       ),
-                                      Text(AppStrings.t('remember_me'),
-                                          style: TextStyle(color: textColor)),
+                                      const Text('Remember me'),
                                     ],
                                   ),
                                   if (error != null) ...[
@@ -410,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           else
                                             const Icon(Icons.login, size: 18),
                                           const SizedBox(width: 8),
-                                          Text(AppStrings.t('login')),
+                                          const Text('Login'),
                                         ],
                                       ),
                                     ),
@@ -420,14 +412,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     children: [
                                       TextButton(
                                         onPressed: _openRegisterDialog,
-                                        child: Text(
-                                            AppStrings.t('create_account')),
+                                        child: const Text('Create Account'),
                                       ),
                                       const Spacer(),
                                       TextButton(
                                         onPressed: _openForgotPasswordDialog,
-                                        child: Text(
-                                            AppStrings.t('forgot_password')),
+                                        child: const Text('Forgot Password?'),
                                       ),
                                     ],
                                   ),

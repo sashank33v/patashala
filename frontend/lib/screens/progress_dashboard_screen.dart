@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
-import '../services/app_strings.dart';
 import '../services/local_prefs.dart';
 import '../widgets/neon_ui.dart';
 import '../widgets/progress_ring.dart';
@@ -57,21 +56,14 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = AdaptiveColors.text(context);
-    final subtextColor = AdaptiveColors.subtext(context);
     return Scaffold(
       endDrawer: Drawer(
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? const Color(0xFF0A1024)
-            : const Color(0xFFFFEAF3),
+        backgroundColor: const Color(0xFF0A1024),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
           children: [
-            Text(AppStrings.t('settings'),
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: textColor)),
+            const Text('Settings',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
             const SizedBox(height: 16),
             if (!_settingsLoaded)
               const Center(
@@ -79,66 +71,46 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
                       padding: EdgeInsets.all(20),
                       child: CircularProgressIndicator()))
             else ...[
-              Text(AppStrings.t('appearance'),
-                  style: TextStyle(color: subtextColor)),
+              const Text('Appearance',
+                  style: TextStyle(color: NeonPalette.subtext)),
               SwitchListTile(
                 value: _settings.darkMode,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(darkMode: v)),
-                title: Text(_settings.darkMode
-                    ? AppStrings.t('dark_mode')
-                    : AppStrings.t('bright_mode')),
+                title: Text(_settings.darkMode ? 'Dark Mode' : 'Bright Mode'),
               ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(AppStrings.t('language'),
-                    style: TextStyle(color: textColor)),
-                trailing: DropdownButton<String>(
-                  value: _settings.languageCode,
-                  items: [
-                    DropdownMenuItem(
-                        value: 'en', child: Text(AppStrings.t('english'))),
-                    DropdownMenuItem(
-                        value: 'te', child: Text(AppStrings.t('telugu'))),
-                  ],
-                  onChanged: (v) {
-                    if (v == null) return;
-                    _updateSettings(_settings.copyWith(languageCode: v));
-                  },
-                ),
-              ),
-              Text(AppStrings.t('learning'),
-                  style: TextStyle(color: subtextColor)),
+              const Text('Learning',
+                  style: TextStyle(color: NeonPalette.subtext)),
               SwitchListTile(
                 value: _settings.showHints,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(showHints: v)),
-                title: Text(AppStrings.t('show_hints')),
+                title: const Text('Show Formula Hints'),
               ),
               SwitchListTile(
                 value: _settings.autoPlay,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(autoPlay: v)),
-                title: Text(AppStrings.t('autoplay_animations')),
+                title: const Text('Auto-play Animations'),
               ),
               const SizedBox(height: 8),
-              Text(AppStrings.t('accessibility'),
-                  style: TextStyle(color: subtextColor)),
+              const Text('Accessibility',
+                  style: TextStyle(color: NeonPalette.subtext)),
               SwitchListTile(
                 value: _settings.highContrast,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(highContrast: v)),
-                title: Text(AppStrings.t('high_contrast')),
+                title: const Text('High Contrast UI'),
               ),
               SwitchListTile(
                 value: _settings.reducedMotion,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(reducedMotion: v)),
-                title: Text(AppStrings.t('reduce_motion')),
+                title: const Text('Reduce Motion'),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text(AppStrings.t('text_size')),
+                title: const Text('Text Size'),
                 subtitle: Slider(
                   value: _settings.textScale,
                   min: 0.8,
@@ -150,35 +122,34 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(AppStrings.t('app_section'),
-                  style: TextStyle(color: subtextColor)),
+              const Text('App', style: TextStyle(color: NeonPalette.subtext)),
               SwitchListTile(
                 value: _settings.notifications,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(notifications: v)),
-                title: Text(AppStrings.t('notifications')),
+                title: const Text('Notifications'),
               ),
               SwitchListTile(
                 value: _settings.soundEffects,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(soundEffects: v)),
-                title: Text(AppStrings.t('sound_effects')),
+                title: const Text('Sound Effects'),
               ),
               SwitchListTile(
                 value: _settings.haptics,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(haptics: v)),
-                title: Text(AppStrings.t('haptic_feedback')),
+                title: const Text('Haptic Feedback'),
               ),
               SwitchListTile(
                 value: _settings.dataSaver,
                 onChanged: (v) =>
                     _updateSettings(_settings.copyWith(dataSaver: v)),
-                title: Text(AppStrings.t('data_saver')),
+                title: const Text('Data Saver Mode'),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text(AppStrings.t('animation_speed')),
+                title: const Text('Animation Speed'),
                 subtitle: Slider(
                   value: _settings.animationSpeed,
                   min: 0.6,
@@ -194,15 +165,15 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
               ListTile(
                 onTap: _logout,
                 leading: const Icon(Icons.logout, color: Colors.redAccent),
-                title: Text(AppStrings.t('logout'),
-                    style: const TextStyle(color: Colors.redAccent)),
+                title: const Text('Logout',
+                    style: TextStyle(color: Colors.redAccent)),
               ),
             ],
           ],
         ),
       ),
       appBar: AppBar(
-        title: Text(AppStrings.t('progress_dashboard')),
+        title: const Text('Progress Dashboard'),
         actions: [
           Builder(
             builder: (context) => IconButton(
@@ -258,11 +229,9 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Text(AppStrings.t('top_learners'),
+                    const Text('Top Learners',
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            color: textColor)),
+                            fontSize: 18, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 8),
                     ...leaders.take(5).map((l) => Padding(
                           padding: const EdgeInsets.only(bottom: 8),

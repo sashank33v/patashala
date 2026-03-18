@@ -32,16 +32,16 @@ class PatashalaApp extends StatelessWidget {
       ),
     );
     final lightTheme = lightBase.copyWith(
-      scaffoldBackgroundColor: const Color(0xFFFFEFF6),
+      scaffoldBackgroundColor: const Color(0xFFF5F7FB),
       textTheme:
           GoogleFonts.plusJakartaSansTextTheme(lightBase.textTheme).apply(
-        bodyColor: Colors.black,
-        displayColor: Colors.black,
+        bodyColor: const Color(0xFF0F172A),
+        displayColor: const Color(0xFF0F172A),
       ),
       colorScheme: lightBase.colorScheme.copyWith(
         primary: const Color(0xFF4F46E5),
         secondary: const Color(0xFF0891B2),
-        surface: const Color(0xFFFFEAF3),
+        surface: Colors.white,
       ),
     );
 
@@ -54,8 +54,6 @@ class PatashalaApp extends StatelessWidget {
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: settings.darkMode ? ThemeMode.dark : ThemeMode.light,
-          locale: Locale(settings.languageCode),
-          supportedLocales: const [Locale('en'), Locale('te')],
           builder: (context, child) {
             final media = MediaQuery.of(context);
             return MediaQuery(
