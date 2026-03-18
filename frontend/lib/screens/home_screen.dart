@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final textColor = AdaptiveColors.text(context);
     final subtextColor = AdaptiveColors.subtext(context);
     return Scaffold(
+      drawerScrimColor: Colors.transparent,
       endDrawer: Drawer(
         backgroundColor: const Color(0xFF0A1024),
         child: ListView(

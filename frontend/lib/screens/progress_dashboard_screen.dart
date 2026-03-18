@@ -57,6 +57,7 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawerScrimColor: Colors.transparent,
       endDrawer: Drawer(
         backgroundColor: const Color(0xFF0A1024),
         child: ListView(
