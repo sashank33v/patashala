@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings {
   final bool darkMode;
+  final String languageCode;
   final bool notifications;
   final bool soundEffects;
   final bool haptics;
@@ -18,6 +19,7 @@ class AppSettings {
 
   const AppSettings({
     required this.darkMode,
+    required this.languageCode,
     required this.notifications,
     required this.soundEffects,
     required this.haptics,
@@ -33,6 +35,7 @@ class AppSettings {
   factory AppSettings.defaults() {
     return const AppSettings(
       darkMode: true,
+      languageCode: 'en',
       notifications: true,
       soundEffects: true,
       haptics: true,
@@ -48,6 +51,7 @@ class AppSettings {
 
   AppSettings copyWith({
     bool? darkMode,
+    String? languageCode,
     bool? notifications,
     bool? soundEffects,
     bool? haptics,
@@ -61,6 +65,7 @@ class AppSettings {
   }) {
     return AppSettings(
       darkMode: darkMode ?? this.darkMode,
+      languageCode: languageCode ?? this.languageCode,
       notifications: notifications ?? this.notifications,
       soundEffects: soundEffects ?? this.soundEffects,
       haptics: haptics ?? this.haptics,
@@ -77,6 +82,7 @@ class AppSettings {
   Map<String, dynamic> toMap() {
     return {
       'darkMode': darkMode,
+      'languageCode': languageCode,
       'notifications': notifications,
       'soundEffects': soundEffects,
       'haptics': haptics,
@@ -93,6 +99,7 @@ class AppSettings {
   factory AppSettings.fromMap(Map<String, dynamic> map) {
     return AppSettings(
       darkMode: map['darkMode'] as bool? ?? true,
+      languageCode: (map['languageCode'] as String?) ?? 'en',
       notifications: map['notifications'] as bool? ?? true,
       soundEffects: map['soundEffects'] as bool? ?? true,
       haptics: map['haptics'] as bool? ?? true,
