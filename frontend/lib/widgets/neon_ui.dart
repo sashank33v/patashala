@@ -12,6 +12,14 @@ class NeonPalette {
   static const subtext = Color(0xFF94A3B8);
 }
 
+class AdaptiveColors {
+  static bool isDark(BuildContext context) => Theme.of(context).brightness == Brightness.dark;
+
+  static Color text(BuildContext context) => isDark(context) ? NeonPalette.text : const Color(0xFF111827);
+
+  static Color subtext(BuildContext context) => isDark(context) ? NeonPalette.subtext : const Color(0xFF374151);
+}
+
 class MeshBackground extends StatelessWidget {
   final Widget child;
 
@@ -69,6 +77,7 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final content = ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: BackdropFilter(
@@ -76,9 +85,11 @@ class GlassCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.15)),
+            border: Border.all(color: isDark ? Colors.white.withOpacity(0.15) : const Color(0x330F172A)),
             gradient: LinearGradient(
-              colors: [Colors.white.withOpacity(0.13), Colors.white.withOpacity(0.04)],
+              colors: isDark
+                  ? [Colors.white.withOpacity(0.13), Colors.white.withOpacity(0.04)]
+                  : [Colors.white.withOpacity(0.90), Colors.white.withOpacity(0.72)],
             ),
           ),
           padding: padding,

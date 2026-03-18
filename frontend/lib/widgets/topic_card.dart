@@ -13,6 +13,7 @@ class TopicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final subtextColor = AdaptiveColors.subtext(context);
     final gradients = [
       [const Color(0xFF7C3AED), const Color(0xFF06B6D4)],
       [const Color(0xFFEC4899), const Color(0xFF7C3AED)],
@@ -53,19 +54,19 @@ class TopicCard extends StatelessWidget {
                   children: [
                     Text(topic['title'] ?? '', style: const TextStyle(fontWeight: FontWeight.w800)),
                     const SizedBox(height: 4),
-                    Text(topic['description'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: NeonPalette.subtext, fontSize: 12)),
+                    Text(topic['description'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: subtextColor, fontSize: 12)),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        _badge(topic['difficulty']?.toString() ?? 'Beginner'),
+                        _badge(context, topic['difficulty']?.toString() ?? 'Beginner'),
                         const SizedBox(width: 8),
-                        Text(topic['duration']?.toString() ?? '${8 + (index % 5)} min', style: const TextStyle(color: NeonPalette.cyan, fontSize: 12)),
+                        Text(topic['duration']?.toString() ?? '${8 + (index % 5)} min', style: TextStyle(color: AdaptiveColors.isDark(context) ? NeonPalette.cyan : const Color(0xFF0E7490), fontSize: 12)),
                       ],
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: NeonPalette.subtext),
+              Icon(Icons.arrow_forward_ios_rounded, size: 14, color: subtextColor),
             ],
           ),
         ),
@@ -73,14 +74,15 @@ class TopicCard extends StatelessWidget {
     );
   }
 
-  Widget _badge(String text) {
+  Widget _badge(BuildContext context, String text) {
+    final textColor = AdaptiveColors.text(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: Colors.white12,
+        color: Theme.of(context).brightness == Brightness.dark ? Colors.white12 : const Color(0x22111827),
       ),
-      child: Text(text, style: const TextStyle(fontSize: 11, color: NeonPalette.text)),
+      child: Text(text, style: TextStyle(fontSize: 11, color: textColor)),
     );
   }
 }

@@ -56,6 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = AdaptiveColors.text(context);
+    final subtextColor = AdaptiveColors.subtext(context);
     return Scaffold(
       endDrawer: Drawer(
         backgroundColor: const Color(0xFF0A1024),
@@ -67,13 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
             if (!_settingsLoaded)
               const Center(child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()))
             else ...[
-              const Text('Appearance', style: TextStyle(color: NeonPalette.subtext)),
+              Text('Appearance', style: TextStyle(color: subtextColor)),
               SwitchListTile(
                 value: _settings.darkMode,
                 onChanged: (v) => _updateSettings(_settings.copyWith(darkMode: v)),
                 title: Text(_settings.darkMode ? 'Dark Mode' : 'Bright Mode'),
               ),
-              const Text('Learning Boost', style: TextStyle(color: NeonPalette.subtext)),
+              Text('Learning Boost', style: TextStyle(color: subtextColor)),
               SwitchListTile(
                 value: _settings.showHints,
                 onChanged: (v) => _updateSettings(_settings.copyWith(showHints: v)),
@@ -84,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onChanged: (v) => _updateSettings(_settings.copyWith(autoPlay: v)),
                 title: const Text('Auto-play Visuals'),
               ),
-              const Text('Experience', style: TextStyle(color: NeonPalette.subtext)),
+              Text('Experience', style: TextStyle(color: subtextColor)),
               SwitchListTile(
                 value: _settings.soundEffects,
                 onChanged: (v) => _updateSettings(_settings.copyWith(soundEffects: v)),
@@ -132,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Row(
                     children: [
-                      const Expanded(child: Text('Patashala', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900))),
+                      Expanded(child: Text('Patashala', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: textColor))),
                       Builder(
                         builder: (context) => IconButton(
                           tooltip: 'Settings',
@@ -146,13 +148,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   GlassCard(
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Welcome Back', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                              SizedBox(height: 4),
-                              Text('Streak: 5 days', style: TextStyle(color: NeonPalette.subtext)),
+                              Text('Welcome Back', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: textColor)),
+                              const SizedBox(height: 4),
+                              Text('Streak: 5 days', style: TextStyle(color: subtextColor)),
                             ],
                           ),
                         ),
@@ -161,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Text('Featured Topics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                  Text('Featured Topics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: textColor)),
                   const SizedBox(height: 8),
                   SizedBox(
                     height: 160,
@@ -189,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Text('All Topics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                  Text('All Topics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: textColor)),
                   const SizedBox(height: 8),
                   GlassCard(
                     onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TopicSelectionScreen(userId: widget.userId))),
