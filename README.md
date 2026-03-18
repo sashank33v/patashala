@@ -2,6 +2,8 @@
 
 Patashala is a student interactive visualization app that transforms math learning into a guided, hands-on experience.
 It combines simulation-first content, modern UX, and performance-focused engineering across web and mobile.
+Lessons span a progression of topics through lightweight simulations, adaptive hints, and sequenced challenges, so students stay curious instead of guessing from dense text.
+Every screen centers on responsive controls, live feedback, and compact storytelling that ties the math back to real-world phenomena.
 
 ## Demo Video
 <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;">
@@ -101,6 +103,18 @@ Core pillars:
 - Area of Square
 - Perimeter of Shapes
 - Area by Grid Method
+
+### Chemistry
+- Mole Fraction & Concentration
+- Visualizing Reaction Stoichiometry
+- Energy Profile of Reactions
+- pH & Buffer Simulations
+
+### Physics
+- Force Diagrams & Vector Addition
+- Motion Under Gravity
+- Wave Interference & Sound
+- Circuit Behavior with Simulation Controls
 
 ## Why Patashala (Differentiators)
 - Interaction-first pedagogy over static lesson screens
