@@ -17,10 +17,10 @@ class AdaptiveColors {
       Theme.of(context).brightness == Brightness.dark;
 
   static Color text(BuildContext context) =>
-      isDark(context) ? NeonPalette.text : const Color(0xFF111827);
+      isDark(context) ? NeonPalette.text : Colors.black;
 
   static Color subtext(BuildContext context) =>
-      isDark(context) ? NeonPalette.subtext : const Color(0xFF374151);
+      isDark(context) ? NeonPalette.subtext : Colors.black;
 }
 
 class MeshBackground extends StatelessWidget {
