@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 from app.main import (
+    forgot_password,
     get_leaderboard,
     get_progress,
     get_presets,
@@ -11,6 +12,7 @@ from app.main import (
     save_progress,
 )
 from app.schemas import LoginRequest, ProgressCreate
+from app.schemas import ForgotPasswordRequest
 
 
 def test_get_topics():
@@ -73,3 +75,12 @@ def test_login_success(db_session):
     result = login(LoginRequest(username="student", password="student123"), db_session)
     assert result["user_id"] == 1
     assert result["username"] == "student"
+
+
+def test_forgot_password_then_login(db_session):
+    forgot_password(
+        ForgotPasswordRequest(username="student", new_password="newpass123"),
+        db_session,
+    )
+    result = login(LoginRequest(username="student", password="newpass123"), db_session)
+    assert result["user_id"] == 1

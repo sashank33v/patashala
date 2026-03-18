@@ -41,6 +41,20 @@ class ApiService {
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
+  static Future<void> forgotPassword({
+    required String username,
+    required String newPassword,
+  }) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/auth/forgot-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'username': username, 'new_password': newPassword}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Unable to reset password');
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> fetchTopics() async {
     final response = await client.get(Uri.parse('$baseUrl/topics'));
     if (response.statusCode != 200) {

@@ -13,6 +13,7 @@ from app.engines.mensuration_engine import MensurationEngine
 from app.engines.trig_engine import TrigEngine
 from app.models import AuthUser, Progress, User
 from app.schemas import (
+    ForgotPasswordRequest,
     LoginRequest,
     ProgressCreate,
     ProgressOut,
@@ -71,6 +72,17 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)) -> dict[str, Any
         raise HTTPException(status_code=404, detail="User not found")
 
     return {"user_id": user.id, "name": user.name, "username": auth.username}
+
+
+@app.post("/auth/forgot-password")
+def forgot_password(payload: ForgotPasswordRequest, db: Session = Depends(get_db)) -> dict[str, str]:
+    auth = db.query(AuthUser).filter(AuthUser.username == payload.username).first()
+    if not auth:
+        raise HTTPException(status_code=404, detail="Username not found")
+
+    auth.password = payload.new_password
+    db.commit()
+    return {"message": "Password updated successfully"}
 
 
 @app.post("/users")

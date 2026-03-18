@@ -65,6 +65,164 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _openRegisterDialog() async {
+    final nameCtrl = TextEditingController();
+    final userCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
+    final confirmCtrl = TextEditingController();
+    String? dialogError;
+    bool inProgress = false;
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Create Account'),
+          content: SizedBox(
+            width: 380,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Name')),
+                const SizedBox(height: 8),
+                TextField(controller: userCtrl, decoration: const InputDecoration(labelText: 'Username')),
+                const SizedBox(height: 8),
+                TextField(controller: passCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
+                const SizedBox(height: 8),
+                TextField(controller: confirmCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'Confirm Password')),
+                if (dialogError != null) ...[
+                  const SizedBox(height: 8),
+                  Text(dialogError!, style: const TextStyle(color: Colors.redAccent)),
+                ],
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: inProgress ? null : () => Navigator.pop(context), child: const Text('Cancel')),
+            FilledButton(
+              onPressed: inProgress
+                  ? null
+                  : () async {
+                      final name = nameCtrl.text.trim();
+                      final username = userCtrl.text.trim();
+                      final pass = passCtrl.text;
+                      final confirm = confirmCtrl.text;
+                      if (name.isEmpty || username.isEmpty || pass.isEmpty) {
+                        setDialogState(() => dialogError = 'All fields are required');
+                        return;
+                      }
+                      if (pass != confirm) {
+                        setDialogState(() => dialogError = 'Passwords do not match');
+                        return;
+                      }
+                      setDialogState(() {
+                        inProgress = true;
+                        dialogError = null;
+                      });
+                      try {
+                        final result = await ApiService.register(name: name, username: username, password: pass);
+                        if (!mounted) return;
+                        await LocalPrefs.saveSession(
+                          userId: result['user_id'] as int,
+                          username: username,
+                          rememberMe: true,
+                        );
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => HomeScreen(userId: result['user_id'] as int)),
+                        );
+                      } catch (e) {
+                        setDialogState(() => dialogError = e.toString().replaceFirst('Exception: ', ''));
+                      } finally {
+                        if (mounted) setDialogState(() => inProgress = false);
+                      }
+                    },
+              child: const Text('Create'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openForgotPasswordDialog() async {
+    final userCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
+    final confirmCtrl = TextEditingController();
+    String? dialogError;
+    bool inProgress = false;
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Forgot Password'),
+          content: SizedBox(
+            width: 360,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(controller: userCtrl, decoration: const InputDecoration(labelText: 'Username')),
+                const SizedBox(height: 8),
+                TextField(controller: passCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'New Password')),
+                const SizedBox(height: 8),
+                TextField(controller: confirmCtrl, obscureText: true, decoration: const InputDecoration(labelText: 'Confirm New Password')),
+                if (dialogError != null) ...[
+                  const SizedBox(height: 8),
+                  Text(dialogError!, style: const TextStyle(color: Colors.redAccent)),
+                ],
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: inProgress ? null : () => Navigator.pop(context), child: const Text('Cancel')),
+            FilledButton(
+              onPressed: inProgress
+                  ? null
+                  : () async {
+                      final username = userCtrl.text.trim();
+                      final pass = passCtrl.text;
+                      final confirm = confirmCtrl.text;
+                      if (username.isEmpty || pass.isEmpty) {
+                        setDialogState(() => dialogError = 'All fields are required');
+                        return;
+                      }
+                      if (pass != confirm) {
+                        setDialogState(() => dialogError = 'Passwords do not match');
+                        return;
+                      }
+                      setDialogState(() {
+                        inProgress = true;
+                        dialogError = null;
+                      });
+                      try {
+                        await ApiService.forgotPassword(username: username, newPassword: pass);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        setState(() {
+                          usernameCtrl.text = username;
+                          passwordCtrl.text = pass;
+                          error = null;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Password updated. Please login.')),
+                        );
+                      } catch (e) {
+                        setDialogState(() => dialogError = e.toString().replaceFirst('Exception: ', ''));
+                      } finally {
+                        if (mounted) setDialogState(() => inProgress = false);
+                      }
+                    },
+              child: const Text('Update'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,6 +332,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ],
                                   ),
                                 ),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  TextButton(
+                                    onPressed: _openRegisterDialog,
+                                    child: const Text('Create Account'),
+                                  ),
+                                  const Spacer(),
+                                  TextButton(
+                                    onPressed: _openForgotPasswordDialog,
+                                    child: const Text('Forgot Password?'),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
