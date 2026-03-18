@@ -152,19 +152,27 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
 
   Future<void> _openSettingsSheet(BuildContext context) async {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    await showModalBottomSheet<void>(
+    await showDialog<void>(
       context: context,
-      isScrollControlled: true,
       barrierColor: Colors.transparent,
-      backgroundColor:
-          isDark ? const Color(0xFF0A1024) : const Color(0xFFFFEAF3),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-          child: _buildSettingsContent(context),
+      builder: (dialogContext) => Align(
+        alignment: Alignment.centerRight,
+        child: Material(
+          color: isDark ? const Color(0xFF0A1024) : const Color(0xFFFFEAF3),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(18),
+            bottomLeft: Radius.circular(18),
+          ),
+          child: SizedBox(
+            width: 360,
+            height: double.infinity,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                child: _buildSettingsContent(dialogContext),
+              ),
+            ),
+          ),
         ),
       ),
     );
