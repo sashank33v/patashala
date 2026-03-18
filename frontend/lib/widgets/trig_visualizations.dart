@@ -132,9 +132,30 @@ class UnitCircleVisualizer extends StatefulWidget {
   State<UnitCircleVisualizer> createState() => _UnitCircleVisualizerState();
 }
 
-class _UnitCircleVisualizerState extends State<UnitCircleVisualizer> {
+class _UnitCircleVisualizerState extends State<UnitCircleVisualizer>
+    with SingleTickerProviderStateMixin {
   double angle = 45;
   bool radians = false;
+  bool autoRotate = false;
+  late final AnimationController _rotationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _rotationController = AnimationController(vsync: this, duration: const Duration(seconds: 10))
+      ..addListener(() {
+        if (!autoRotate) return;
+        setState(() {
+          angle = (_rotationController.value * 360) % 360;
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _rotationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +188,35 @@ class _UnitCircleVisualizerState extends State<UnitCircleVisualizer> {
             ],
           ),
           const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              OutlinedButton.icon(
+                onPressed: () => setState(() => angle = (angle - 15) < 0 ? 360 : angle - 15),
+                icon: const Icon(Icons.remove),
+                label: const Text('-15°'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => setState(() => angle = (angle + 15) > 360 ? 0 : angle + 15),
+                icon: const Icon(Icons.add),
+                label: const Text('+15°'),
+              ),
+              FilledButton.icon(
+                onPressed: () {
+                  setState(() => autoRotate = !autoRotate);
+                  if (autoRotate) {
+                    _rotationController.repeat();
+                  } else {
+                    _rotationController.stop();
+                  }
+                },
+                icon: Icon(autoRotate ? Icons.pause : Icons.play_arrow),
+                label: Text(autoRotate ? 'Pause' : 'Play'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
           Row(
             children: [
               Expanded(
