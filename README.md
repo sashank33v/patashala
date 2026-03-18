@@ -1,34 +1,32 @@
 # Patashala
 
-Patashala is a student interactive visualization app designed to make mathematics intuitive through visual exploration, simulation, and active practice.
-It combines Flutter (Web + Android) with FastAPI + PostgreSQL + Redis to deliver a complete product experience across content, interaction, and progress tracking.
+Patashala is a student interactive visualization app that transforms math learning into a guided, hands-on experience.
+It combines simulation-first content, modern UX, and performance-focused engineering across web and mobile.
 
-## Project Description
-Patashala turns abstract concepts into interactive scenes that students can manipulate in real time.
-Instead of static explanations, learners use controls like sliders, drag handles, and tap-driven grids to see cause-and-effect behavior instantly.
+## Vision
+Build a learning product where students understand concepts by interacting with them, not by memorizing static text.
 
-The platform focuses on:
-- Visual-first learning with live feedback
-- Hands-on interaction before formula memorization
-- Lightweight gamification through quiz, progress, and completion states
-- Clean, modern UI that keeps attention on concept understanding
+## Problem
+Many students struggle with mathematics because:
+- Concepts are explained abstractly instead of visually
+- Learning is passive instead of exploratory
+- Practice feedback is delayed and disconnected from intuition
+- Progress tracking is often unclear and unmotivating
 
-## Project Goal
-Help students understand:
-- Trigonometry (basic visual concepts)
-- Mensuration (area and perimeter)
+## Solution
+Patashala delivers concept learning through real-time visual interaction.
+Students can drag, slide, rotate, and tap visual models to discover how values change, then validate understanding through mini quizzes.
 
-Using:
-- Interactive visualizations
-- Simulation controls
-- Step hints
-- Mini quizzes
-- Progress tracking
+Core pillars:
+- Visual learning: dynamic diagrams and graph-like views
+- Interactive exploration: live controls and drag-based geometry
+- Active learning: simulation-driven cause-and-effect
+- Gamification: progress states, completion actions, and dashboard metrics
 
-## Topics Covered
+## Product Scope
 ### Trigonometry
 - Right Triangle Basics
-- Sine & Cosine (visual)
+- Sine & Cosine (Visual)
 - Angle Rotation
 - Shadow Length Simulation
 
@@ -38,17 +36,12 @@ Using:
 - Perimeter of Shapes
 - Area by Grid Method
 
-## Tools & Technologies Used
-- Frontend: Flutter (`Dart`)
-- Backend API: FastAPI (`Python`)
-- Database: PostgreSQL
-- Cache: Redis
-- ORM: SQLAlchemy
-- API Validation: Pydantic
-- Testing: `flutter_test`, `pytest`
-- Containerization: Docker, Docker Compose
-- CI/CD Frontend: GitHub Actions + GitHub Pages
-- Deployment Backend: Render
+## Why Patashala (Differentiators)
+- Interaction-first pedagogy over static lesson screens
+- Reusable visualization architecture driven by topic metadata
+- Consistent cross-platform experience (Flutter Web + Android)
+- Fast API backend with cache layer for repeated simulation queries
+- Product-ready UI system (glass cards, dark-neon visual identity, focused control hierarchy)
 
 ## System Architecture
 
@@ -60,7 +53,7 @@ flowchart LR
   B --> E[Visualization Engines\nTrig + Mensuration]
 ```
 
-## Learning Flow Sheet
+## Product Flow Sheet
 
 ```mermaid
 flowchart TD
@@ -70,30 +63,42 @@ flowchart TD
   T --> V[Visualization]
   V --> Q[Mini Quiz]
   Q --> P[Progress Update]
-  P --> D[Dashboard + Badges]
+  P --> D[Dashboard]
 ```
 
 ## User Flow
 1. Student logs in with username/password.
-2. Home screen shows featured topics and progress ring.
-3. Student chooses Trigonometry or Mensuration topic.
-4. Student interacts with sliders/drag controls in visualization.
-5. Student completes mini quiz.
-6. App saves completion and updates dashboard stats.
+2. Home screen presents featured concepts and progress snapshot.
+3. Student enters a topic and manipulates visual controls.
+4. Simulation updates instantly as parameters change.
+5. Student attempts mini quiz for concept validation.
+6. Progress is stored and reflected in dashboard analytics.
+
+## Tools & Technologies
+- Frontend: Flutter (`Dart`)
+- Backend API: FastAPI (`Python`)
+- Database: PostgreSQL
+- Cache: Redis
+- ORM: SQLAlchemy
+- Validation: Pydantic
+- Testing: `flutter_test`, `pytest`
+- DevOps: Docker, Docker Compose
+- CI/CD: GitHub Actions
+- Hosting: GitHub Pages (frontend), Render (backend)
 
 ## Key Features
-- Neon dark UI with glass cards
-- Simple login + remember session
-- Settings drawer (hints, autoplay, sound, haptics, text size, logout)
-- Global text scaling from settings
-- Mensuration game-like interactions:
-  - Drag handles
-  - Animated measurement rulers
-  - Tap-to-fill grid area
-  - Step-by-step hints
-- Trig visualizers with live sin/cos/tan cards
+- Simple login with session persistence
+- Home/dashboard settings with text scaling and interaction preferences
+- Interactive trig visualizers with live sin/cos/tan values
+- Game-like mensuration interactions:
+  - Drag handles for dimensions
+  - Animated ruler cues
+  - Tap-to-fill grid area method
+  - Step-by-step hint panels
+- Mini quizzes + completion workflow
+- Progress dashboard with summary and leaderboard view
 
-## Backend API Endpoints
+## Backend API Surface
 - `GET /health`
 - `GET /topics`
 - `GET /visualization/{topic_id}`
@@ -102,8 +107,7 @@ flowchart TD
 - `POST /auth/login`
 - `POST /auth/register`
 
-## Local Run
-
+## Local Development
 ### Backend
 ```bash
 cd backend
@@ -121,7 +125,7 @@ flutter pub get
 flutter run -d web-server --web-hostname 0.0.0.0 --web-port 7361 --dart-define=API_BASE_URL=http://127.0.0.1:8000
 ```
 
-## Test Commands
+## Quality Checks
 ```bash
 # frontend
 cd frontend
@@ -132,6 +136,13 @@ flutter test
 cd ../backend
 .venv/bin/python -m pytest -q
 ```
+
+## Roadmap
+- Adaptive learning recommendations based on weak-topic patterns
+- Expanded subject catalog with richer simulation packs
+- Teacher mode with class-level insights
+- Achievement system upgrade (milestones, streak rewards, challenge modes)
+- Offline-ready lesson packs for low-connectivity regions
 
 ## Demo Login
 - Username: `student`
