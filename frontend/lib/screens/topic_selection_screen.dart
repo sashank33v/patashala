@@ -73,6 +73,28 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
                 ? all
                 : all.where((t) => t['subject'] == filter).toList();
 
+            final chemTopics = [
+              {
+                'id': 'chem-reaction-kinetics',
+                'title': 'Reaction Kinetics',
+                'description': 'Visualize rate vs concentration',
+                'subject': 'Chemistry',
+                'difficulty': 'Beginner',
+                'duration': '8 min'
+              },
+            ];
+
+            final physTopics = [
+              {
+                'id': 'phy-projectile-motion',
+                'title': 'Projectile Motion',
+                'description': 'Angle and speed control of trajectories',
+                'subject': 'Physics',
+                'difficulty': 'Beginner',
+                'duration': '9 min'
+              },
+            ];
+
             if (selectedSubject == null) {
               return ListView(
                 padding: const EdgeInsets.all(16),
@@ -104,36 +126,50 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
                   const SizedBox(height: 10),
                   _subjectCard(
                     title: 'Chemistry',
-                    subtitle: 'Interactive chemistry labs (coming soon)',
+                    subtitle: 'Reaction kinetics + ionic visuals',
                     gradient: const [Color(0xFF0EA5E9), Color(0xFF22C55E)],
                     icon: Icons.science_rounded,
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Chemistry topics are coming soon.')),
-                      );
-                    },
+                    onTap: () => setState(() => selectedSubject = 'Chemistry'),
                   ),
                   const SizedBox(height: 10),
                   _subjectCard(
                     title: 'Physics',
-                    subtitle: 'Interactive physics simulations (coming soon)',
+                    subtitle: 'Mechanics + field explorations',
                     gradient: const [Color(0xFFF97316), Color(0xFFEC4899)],
                     icon: Icons.bolt_rounded,
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Physics topics are coming soon.')),
-                      );
-                    },
+                    onTap: () => setState(() => selectedSubject = 'Physics'),
                   ),
                 ],
               );
             }
 
-            if (selectedSubject != 'Maths') {
+            List<Map<String, dynamic>> subjectTopics =
+                selectedSubject == 'Chemistry'
+                    ? chemTopics
+                    : selectedSubject == 'Physics'
+                        ? physTopics
+                        : filtered;
+
+            if (selectedSubject != null && selectedSubject != 'Maths') {
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: subjectTopics.length,
+                itemBuilder: (context, i) => TopicCard(
+                  topic: subjectTopics[i],
+                  index: i,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => VisualizationScreen(
+                            userId: widget.userId, topic: subjectTopics[i])),
+                  ),
+                ),
+              );
+            }
+
+            if (selectedSubject != null && subjectTopics.isEmpty) {
               return Center(
-                child: Text('Select Maths to view available topics.',
+                child: Text('No topics available for $selectedSubject yet.',
                     style: TextStyle(color: textColor)),
               );
             }
@@ -166,15 +202,16 @@ class _TopicSelectionScreenState extends State<TopicSelectionScreen> {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: filtered.length,
+                    itemCount: subjectTopics.length,
                     itemBuilder: (context, i) => TopicCard(
-                      topic: filtered[i],
+                      topic: subjectTopics[i],
                       index: i,
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => VisualizationScreen(
-                                userId: widget.userId, topic: filtered[i])),
+                                userId: widget.userId,
+                                topic: subjectTopics[i])),
                       ),
                     ),
                   ),

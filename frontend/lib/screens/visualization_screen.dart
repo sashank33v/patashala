@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../api_service.dart';
+import '../widgets/chemistry_visualizations.dart';
 import '../widgets/mensuration_visualizations.dart';
 import '../widgets/neon_ui.dart';
+import '../widgets/physics_visualizations.dart';
 import '../widgets/trig_visualizations.dart';
 import 'quiz_screen.dart';
 
@@ -23,7 +25,6 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
   @override
   Widget build(BuildContext context) {
     final id = widget.topic['id'].toString();
-    final isMens = id.startsWith('mens-');
     final notes = _notesForTopic(id);
 
     return Scaffold(
@@ -56,9 +57,7 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                   builder: (context, constraints) {
                     final wide = constraints.maxWidth > 980;
                     final viBoard = GlassCard(
-                      child: isMens
-                          ? MensurationVisualizationHub(topicId: id)
-                          : TrigVisualizationHub(topicId: id),
+                      child: _buildVisualizationHub(id),
                     );
                     final noteBoard = GlassCard(
                       child: _NotesPanel(
@@ -135,6 +134,19 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
     );
   }
 
+  Widget _buildVisualizationHub(String id) {
+    if (id.startsWith('chem-')) {
+      return const ReactionVisualizer();
+    }
+    if (id.startsWith('phy-')) {
+      return const ProjectileVisualizer();
+    }
+    if (id.startsWith('mens-')) {
+      return MensurationVisualizationHub(topicId: id);
+    }
+    return TrigVisualizationHub(topicId: id);
+  }
+
   List<String> _notesForTopic(String topicId) {
     switch (topicId) {
       case 'trig-right-triangle':
@@ -185,6 +197,18 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
           'Tap cells to mark full and half squares.',
           'Area = full squares + half squares / 2.',
           'Use this method for irregular boundaries too.',
+        ];
+      case 'phy-projectile-motion':
+        return [
+          'Adjust the angle to see the parabolic arc.',
+          'Higher speed increases the range and height.',
+          'Notice how gravity curves the path downward.',
+        ];
+      case 'chem-reaction-kinetics':
+        return [
+          'Drag the slider to simulate concentration changes.',
+          'Temperature affects how fast progress occurs.',
+          'Watch the progress bar fill based on your values.',
         ];
       default:
         return [
