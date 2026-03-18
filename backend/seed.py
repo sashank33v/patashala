@@ -1,36 +1,28 @@
-import sys
-sys.path.append(".")
-from app.app import SessionLocal, Topic
+from app.db import Base, SessionLocal, engine
+from app.models import AuthUser, User
 
-db = SessionLocal()
 
-db.add(Topic(
-    slug="sine-wave",
-    name="Sine Wave",
-    subject="Trigonometry",
-    viz_type="sine_wave",
-    config={"amplitude": 1, "frequency": 1, "title": "Sine Wave"},
-    description="Explore how amplitude and frequency affect a sine wave."
-))
+Base.metadata.create_all(bind=engine)
 
-db.add(Topic(
-    slug="cosine-wave",
-    name="Cosine Wave",
-    subject="Trigonometry",
-    viz_type="cosine_wave",
-    config={"amplitude": 1, "frequency": 1, "title": "Cosine Wave"},
-    description="See the relationship between sine and cosine."
-))
 
-db.add(Topic(
-    slug="unit-circle",
-    name="Unit Circle",
-    subject="Trigonometry",
-    viz_type="unit_circle",
-    config={},
-    description="Understand how angles map to coordinates on the unit circle."
-))
+def seed() -> None:
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.id == 1).first()
+        if not user:
+            user = User(id=1, name="Student Demo")
+            db.add(user)
+            db.commit()
+            db.refresh(user)
 
-db.commit()
-db.close()
-print("Seeded successfully.")
+        auth = db.query(AuthUser).filter(AuthUser.username == "student").first()
+        if not auth:
+            db.add(AuthUser(user_id=user.id, username="student", password="student123"))
+            db.commit()
+    finally:
+        db.close()
+
+
+if __name__ == "__main__":
+    seed()
+    print("Seeded demo login: username=student password=student123")

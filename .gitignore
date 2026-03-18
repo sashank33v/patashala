@@ -9,3 +9,5 @@ build/
 *.g.dart
 .idea/
 *.iml
+*.db
+backend/.venv/
