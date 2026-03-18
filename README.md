@@ -3,6 +3,67 @@
 Patashala is a student interactive visualization app that transforms math learning into a guided, hands-on experience.
 It combines simulation-first content, modern UX, and performance-focused engineering across web and mobile.
 
+## Demo Video
+[![Patashala Demo Thumbnail](https://img.youtube.com/vi/i67CCsWdrDo/maxresdefault.jpg)](https://youtu.be/i67CCsWdrDo)
+
+## Project Structure
+```text
+.
+├── .github
+│   └── workflows
+│       └── frontend-pages.yml
+├── .gitignore
+├── README.md
+├── backend
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── Procfile
+│   ├── app
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   ├── app.py
+│   │   ├── cache.py
+│   │   ├── db.py
+│   │   ├── engines
+│   │   ├── main.py
+│   │   ├── models.py
+│   │   ├── schemas.py
+│   │   └── topic_catalog.py
+│   ├── patashala.db
+│   ├── requirements.txt
+│   ├── seed.py
+│   ├── test_patashala.db
+│   └── tests
+│       ├── __pycache__
+│       ├── conftest.py
+│       └── test_api.py
+├── docker-compose.yml
+├── frontend
+│   ├── .gitignore
+│   ├── README.md
+│   ├── analysis_options.yaml
+│   ├── lib
+│   │   ├── api_service.dart
+│   │   ├── data
+│   │   ├── main.dart
+│   │   ├── screens
+│   │   ├── services
+│   │   └── widgets
+│   ├── pubspec.lock
+│   ├── pubspec.yaml
+│   ├── test
+│   │   ├── simulation_quiz_test.dart
+│   │   └── widget_test.dart
+│   └── web
+│       ├── favicon.png
+│       ├── icons
+│       ├── index.html
+│       └── manifest.json
+└── render.yaml
+
+17 directories, 34 files
+```
+
 ## Vision
 Build a learning product where students understand concepts by interacting with them, not by memorizing static text.
 
