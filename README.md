@@ -1,7 +1,17 @@
 # Patashala
 
-Patashala is a Class 6 learning app focused on visual math learning through interactive simulations.
-It combines Flutter (Web + Android) with FastAPI + PostgreSQL + Redis.
+Patashala is a student interactive visualization app designed to make mathematics intuitive through visual exploration, simulation, and active practice.
+It combines Flutter (Web + Android) with FastAPI + PostgreSQL + Redis to deliver a complete product experience across content, interaction, and progress tracking.
+
+## Project Description
+Patashala turns abstract concepts into interactive scenes that students can manipulate in real time.
+Instead of static explanations, learners use controls like sliders, drag handles, and tap-driven grids to see cause-and-effect behavior instantly.
+
+The platform focuses on:
+- Visual-first learning with live feedback
+- Hands-on interaction before formula memorization
+- Lightweight gamification through quiz, progress, and completion states
+- Clean, modern UI that keeps attention on concept understanding
 
 ## Project Goal
 Help students understand:
@@ -122,26 +132,6 @@ flutter test
 cd ../backend
 .venv/bin/python -m pytest -q
 ```
-
-## Deployment (Sequential)
-
-### 1) Backend -> Render
-1. Push latest code to `main`.
-2. In Render dashboard, click **New +** -> **Blueprint**.
-3. Select this repository.
-4. Render reads `render.yaml` and creates `patashala-api`.
-5. Deploy and wait for **Live**.
-6. Verify: `https://<your-render-url>/health`.
-
-### 2) Frontend -> GitHub Pages
-1. In GitHub repo settings, open **Pages**.
-2. Set **Source** to **GitHub Actions**.
-3. Ensure workflow file exists: `.github/workflows/frontend-pages.yml`.
-4. Update workflow API URL if needed:
-   - `--dart-define=API_BASE_URL=https://<your-render-url>`
-5. Push to `main` (or run workflow manually in Actions tab).
-6. After workflow success, open:
-   - `https://sashank33v.github.io/patashala/`
 
 ## Demo Login
 - Username: `student`
