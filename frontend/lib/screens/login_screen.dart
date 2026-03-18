@@ -472,14 +472,14 @@ class _Badge extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white12),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: NeonPalette.cyan),
-          const SizedBox(width: 6),
-          Text(text, style: const TextStyle(fontWeight: FontWeight.w700)),
-        ],
-      ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 20, color: NeonPalette.cyan),
+            const SizedBox(width: 6),
+            Text(text, style: const TextStyle(fontWeight: FontWeight.w700)),
+          ],
+        ),
     );
   }
 }

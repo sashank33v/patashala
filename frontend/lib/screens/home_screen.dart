@@ -391,9 +391,9 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
-              radius: 20,
+              radius: 22,
               backgroundColor: Colors.white.withOpacity(0.25),
-              child: Icon(icon, color: Colors.white, size: 20),
+              child: Icon(icon, color: Colors.white, size: 24),
             ),
             const SizedBox(height: 12),
             Text(title,
