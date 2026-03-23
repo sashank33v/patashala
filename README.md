@@ -154,6 +154,18 @@ flowchart TD
 5. Student attempts mini quiz for concept validation.
 6. Progress is stored and reflected in dashboard analytics.
 
+## Frameworks Used
+- Frontend framework: Flutter
+- Frontend language: Dart
+- Backend framework: FastAPI
+- Backend language: Python
+- ORM: SQLAlchemy
+- Validation: Pydantic
+- HTTP client libraries: `http` in Flutter, `httpx` in Python
+- Local persistence: SharedPreferences
+- Cache layer: Redis
+- AI integration: Gemini API through the backend
+
 ## Tools & Technologies
 - Frontend: Flutter (`Dart`)
 - Backend API: FastAPI (`Python`)
@@ -165,6 +177,30 @@ flowchart TD
 - DevOps: Docker, Docker Compose
 - CI/CD: GitHub Actions
 - Hosting: GitHub Pages (frontend), Render (backend)
+
+## Workflow Used
+### Development Workflow
+1. Build frontend UI and interactions in Flutter.
+2. Expose app data and progress APIs through FastAPI.
+3. Use SQLAlchemy models and Pydantic schemas for backend data flow.
+4. Use Redis caching for repeated visualization responses.
+5. Run frontend and backend locally during development.
+6. Validate behavior with `flutter_test` and `pytest`.
+
+### Runtime Workflow
+1. User opens the Flutter app on web or mobile.
+2. Flutter requests data from the FastAPI backend.
+3. Backend serves topics, progress, recommendations, and leaderboard data.
+4. Flutter runs interactive visual learning experiences on the client.
+5. Progress updates are sent back to the backend and stored in the database.
+6. Study chat requests go from Flutter to FastAPI, then from FastAPI to Gemini.
+
+### Deployment Workflow
+1. Code is pushed to the `main` branch.
+2. GitHub Actions builds the Flutter web app.
+3. The frontend is deployed to GitHub Pages.
+4. Render auto-deploys the backend from the same repository.
+5. Render serves the FastAPI app and reads secure environment variables such as `GEMINI_API_KEY`.
 
 ## Key Features
 - Simple login with session persistence
