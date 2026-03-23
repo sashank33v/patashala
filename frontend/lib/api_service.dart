@@ -133,4 +133,34 @@ class ApiService {
     final leaders = (data['leaders'] as List<dynamic>? ?? []);
     return leaders.cast<Map<String, dynamic>>();
   }
+
+  static Future<String> studyChat({
+    required String topicId,
+    required String topicTitle,
+    required List<String> notes,
+    required List<Map<String, String>> messages,
+  }) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/ai/study-chat'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'topic_id': topicId,
+        'topic_title': topicTitle,
+        'notes': notes,
+        'messages': messages,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      String message = 'Study chat is unavailable right now';
+      try {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        message = data['detail']?.toString() ?? message;
+      } catch (_) {}
+      throw Exception(message);
+    }
+
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    return data['answer']?.toString() ?? 'No answer available';
+  }
 }

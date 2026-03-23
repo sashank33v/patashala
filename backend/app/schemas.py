@@ -31,3 +31,15 @@ class RegisterRequest(BaseModel):
 class ForgotPasswordRequest(BaseModel):
     username: str = Field(..., min_length=3, max_length=50)
     new_password: str = Field(..., min_length=3, max_length=80)
+
+
+class ChatMessage(BaseModel):
+    role: str = Field(..., min_length=1, max_length=20)
+    text: str = Field(..., min_length=1, max_length=4000)
+
+
+class StudyChatRequest(BaseModel):
+    topic_id: str = Field(..., min_length=1, max_length=80)
+    topic_title: str = Field(..., min_length=1, max_length=120)
+    notes: list[str] = Field(..., min_length=1, max_length=20)
+    messages: list[ChatMessage] = Field(..., min_length=1, max_length=20)

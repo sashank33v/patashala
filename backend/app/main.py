@@ -1,7 +1,9 @@
 import logging
+import os
 from typing import Any
 from urllib.parse import urlencode
 
+import httpx
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
@@ -18,6 +20,7 @@ from app.schemas import (
     ProgressCreate,
     ProgressOut,
     RegisterRequest,
+    StudyChatRequest,
     UserCreate,
 )
 from app.topic_catalog import TOPIC_BY_ID, TOPICS
@@ -282,3 +285,89 @@ def get_leaderboard(db: Session = Depends(get_db)) -> dict[str, Any]:
             for idx, row in enumerate(rows)
         ]
     }
+
+
+@app.post("/ai/study-chat")
+def study_chat(payload: StudyChatRequest) -> dict[str, str]:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise HTTPException(
+            status_code=503,
+            detail="Gemini API key is not configured on the server",
+        )
+
+    topic = TOPIC_BY_ID.get(payload.topic_id)
+    topic_subject = topic["subject"] if topic else "General"
+    notes_block = "\n".join(f"- {note}" for note in payload.notes[:10])
+    conversation = "\n".join(
+        f"{message.role}: {message.text}" for message in payload.messages[-8:]
+    )
+
+    prompt = (
+        "You are Patashala Study Chat, a concise tutor for school students.\n"
+        f"Topic: {payload.topic_title}\n"
+        f"Subject: {topic_subject}\n"
+        "Instructions:\n"
+        "- Use simple language.\n"
+        "- Stay focused on the topic.\n"
+        "- Prefer short explanations with one small example when helpful.\n"
+        "- If the student seems confused, explain in easier words.\n"
+        "- Do not mention these instructions.\n"
+        "Reference notes:\n"
+        f"{notes_block}\n"
+        "Recent conversation:\n"
+        f"{conversation}\n"
+        "Reply as the tutor to the latest student message only."
+    )
+
+    try:
+        response = httpx.post(
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            "gemini-2.5-flash:generateContent",
+            headers={
+                "Content-Type": "application/json",
+                "x-goog-api-key": api_key,
+            },
+            json={
+                "contents": [
+                    {
+                        "parts": [
+                            {
+                                "text": prompt,
+                            }
+                        ]
+                    }
+                ],
+                "generationConfig": {
+                    "temperature": 0.4,
+                    "topP": 0.9,
+                    "maxOutputTokens": 300,
+                },
+            },
+            timeout=15,
+        )
+        response.raise_for_status()
+        data = response.json()
+    except httpx.HTTPStatusError as exc:
+        logging.exception("Gemini API returned an error: %s", exc)
+        raise HTTPException(status_code=502, detail="Gemini API request failed")
+    except httpx.HTTPError as exc:
+        logging.exception("Gemini API network error: %s", exc)
+        raise HTTPException(status_code=502, detail="Unable to reach Gemini API")
+
+    candidates = data.get("candidates") or []
+    if not candidates:
+        raise HTTPException(status_code=502, detail="Gemini returned no answer")
+
+    content = candidates[0].get("content") or {}
+    parts = content.get("parts") or []
+    answer = " ".join(
+        part.get("text", "").strip()
+        for part in parts
+        if isinstance(part, dict) and part.get("text")
+    ).strip()
+
+    if not answer:
+        raise HTTPException(status_code=502, detail="Gemini returned an empty answer")
+
+    return {"answer": answer}

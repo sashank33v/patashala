@@ -82,6 +82,7 @@ class _VisualizationScreenState extends State<VisualizationScreen> {
                           ),
                           const SizedBox(height: 14),
                           _StudyChatPanel(
+                            topicId: id,
                             topicTitle:
                                 widget.topic['title']?.toString() ?? 'Topic',
                             content: content,
@@ -796,10 +797,12 @@ class _NotesPanel extends StatelessWidget {
 }
 
 class _StudyChatPanel extends StatefulWidget {
+  final String topicId;
   final String topicTitle;
   final _TopicLearningContent content;
 
   const _StudyChatPanel({
+    required this.topicId,
     required this.topicTitle,
     required this.content,
   });
@@ -811,6 +814,7 @@ class _StudyChatPanel extends StatefulWidget {
 class _StudyChatPanelState extends State<_StudyChatPanel> {
   final TextEditingController _controller = TextEditingController();
   late final List<_ChatMessage> _messages;
+  bool _sending = false;
 
   @override
   void initState() {
@@ -830,45 +834,58 @@ class _StudyChatPanelState extends State<_StudyChatPanel> {
     super.dispose();
   }
 
-  void _sendQuestion(String text) {
+  Future<void> _sendQuestion(String text) async {
     final question = text.trim();
-    if (question.isEmpty) return;
+    if (question.isEmpty || _sending) return;
 
     setState(() {
       _messages.add(_ChatMessage(text: question, isUser: true));
-      _messages.add(
-        _ChatMessage(
-          text: _buildReply(question),
-          isUser: false,
-        ),
-      );
       _controller.clear();
+      _sending = true;
     });
+
+    try {
+      final answer = await ApiService.studyChat(
+        topicId: widget.topicId,
+        topicTitle: widget.topicTitle,
+        notes: widget.content.notes,
+        messages: _messages
+            .map(
+              (message) => {
+                'role': message.isUser ? 'student' : 'assistant',
+                'text': message.text,
+              },
+            )
+            .toList(),
+      );
+      if (!mounted) return;
+      setState(() {
+        _messages.add(_ChatMessage(text: answer, isUser: false));
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _messages.add(
+          _ChatMessage(
+            text: _fallbackReply(question),
+            isUser: false,
+          ),
+        );
+      });
+    } finally {
+      if (!mounted) return;
+      setState(() => _sending = false);
+    }
   }
 
-  String _buildReply(String question) {
+  String _fallbackReply(String question) {
     final lower = question.toLowerCase();
     for (final entry in widget.content.keywordResponses.entries) {
       if (lower.contains(entry.key)) {
-        return entry.value;
+        return '${entry.value}\n\nGemini is unavailable right now, so this is the built-in explanation.';
       }
     }
-
-    if (lower.contains('summary') || lower.contains('explain')) {
-      return widget.content.notes.take(3).join(' ');
-    }
-
-    if (lower.contains('formula')) {
-      return widget.content.notes
-          .where((note) =>
-              note.contains('=') ||
-              note.toLowerCase().contains('formula') ||
-              note.toLowerCase().contains('use '))
-          .take(2)
-          .join(' ');
-    }
-
-    return 'Start with this idea: ${widget.content.notes.first} Then remember: ${widget.content.notes[1]}';
+    return 'Gemini is unavailable right now. Start with this idea: ${widget.content.notes.first}';
   }
 
   @override
@@ -893,6 +910,11 @@ class _StudyChatPanelState extends State<_StudyChatPanel> {
           'Ask simple questions for quick topic help.',
           style: TextStyle(color: subtextColor, fontWeight: FontWeight.w700),
         ),
+        const SizedBox(height: 6),
+        Text(
+          _sending ? 'Gemini is thinking...' : 'Powered by Gemini via the backend.',
+          style: TextStyle(color: subtextColor),
+        ),
         const SizedBox(height: 12),
         Wrap(
           spacing: 8,
@@ -903,7 +925,7 @@ class _StudyChatPanelState extends State<_StudyChatPanel> {
                   backgroundColor:
                       isDark ? Colors.white10 : const Color(0x140F172A),
                   label: Text(question),
-                  onPressed: () => _sendQuestion(question),
+                  onPressed: _sending ? null : () => _sendQuestion(question),
                 ),
               )
               .toList(),
@@ -970,8 +992,14 @@ class _StudyChatPanelState extends State<_StudyChatPanel> {
             ),
             const SizedBox(width: 8),
             IconButton.filled(
-              onPressed: () => _sendQuestion(_controller.text),
-              icon: const Icon(Icons.send_rounded),
+              onPressed: _sending ? null : () => _sendQuestion(_controller.text),
+              icon: _sending
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.send_rounded),
             ),
           ],
         ),

@@ -186,6 +186,12 @@ flowchart TD
 - `GET /progress/{user_id}`
 - `POST /auth/login`
 - `POST /auth/register`
+- `POST /ai/study-chat`
+
+## Gemini Study Chat Setup
+- Set `GEMINI_API_KEY` in the backend environment before starting the API.
+- For Render deployment, add `GEMINI_API_KEY` in the Render environment settings for `patashala-api`.
+- The Flutter app sends chat requests to the backend, and the backend proxies them to Gemini so the key stays off the client.
 
 ## Local Development
 ### Backend
@@ -194,6 +200,7 @@ cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+export GEMINI_API_KEY=your_gemini_api_key
 python seed.py
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
